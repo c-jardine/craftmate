@@ -295,26 +295,30 @@ const materialQuantityUpdateTypes: Omit<MaterialQuantityUpdateType, "id">[] = [
 ];
 
 async function main() {
-  quantityUnits.map(
-    async (unit) =>
-      await db.materialQuantityUnit.upsert({
-        where: {
-          name: unit.name,
-        },
-        create: unit,
-        update: {},
-      })
+  await Promise.all(
+    quantityUnits.map(
+      async (unit) =>
+        await db.materialQuantityUnit.upsert({
+          where: {
+            name: unit.name,
+          },
+          create: unit,
+          update: {},
+        })
+    )
   );
 
-  materialQuantityUpdateTypes.map(
-    async (updateType) =>
-      await db.materialQuantityUpdateType.upsert({
-        where: {
-          type: updateType.type,
-        },
-        create: updateType,
-        update: {},
-      })
+  await Promise.all(
+    materialQuantityUpdateTypes.map(
+      async (updateType) =>
+        await db.materialQuantityUpdateType.upsert({
+          where: {
+            type: updateType.type,
+          },
+          create: updateType,
+          update: {},
+        })
+    )
   );
 }
 
