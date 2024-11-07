@@ -141,10 +141,14 @@ export function MaterialViewer(
                 <Detail title="SKU" details={sku} />
                 <Detail title="Vendor" details={vendor?.name} />
               </SimpleGrid>
-              <Heading as="h2" fontSize="lg">
-                Updates
-              </Heading>
-              {updates && <MaterialUpdateLogs updates={updates} />}
+              {updates && updates.length > 0 && (
+                <>
+                  <Heading as="h2" fontSize="lg">
+                    Updates
+                  </Heading>
+                  {updates && <MaterialUpdateLogs updates={updates} />}
+                </>
+              )}
             </Stack>
           </DrawerBody>
           <DrawerFooter gap={4}>
