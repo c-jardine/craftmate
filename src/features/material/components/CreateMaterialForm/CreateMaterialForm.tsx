@@ -115,6 +115,7 @@ export function CreateMaterialForm() {
                   control={control}
                   name="quantity"
                   label="Quantity"
+                  isRequired
                   formControlProps={{ gridColumn: "1 / span 3" }}
                   inputProps={{
                     as: NumericFormat,

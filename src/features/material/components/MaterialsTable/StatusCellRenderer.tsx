@@ -52,7 +52,8 @@ export function StatusCellRenderer({
     }
   }
 
-  if (!node.data?.status) {
+  // If min quantity isn't set, there's no reason to calculate the stock status
+  if (!node.data?.minQuantity) {
     return Character.EM_DASH;
   }
 
