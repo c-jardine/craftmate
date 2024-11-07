@@ -15,8 +15,7 @@ export function DesktopNavbar() {
     { href: "/", label: "Dashboard" },
     { href: "/materials", label: "Materials" },
     { href: "/products", label: "Products" },
-    { href: "/blueprints", label: "Blueprints" },
-    { href: "/production", label: "Production" },
+    { href: "/recipes", label: "Recipes" },
     { href: "/history", label: "History" },
   ];
 

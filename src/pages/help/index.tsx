@@ -84,10 +84,10 @@ export default function Help() {
       href: "/help/products",
     },
     {
-      title: "Blueprints",
+      title: "Recipes",
       description:
-        "Materials can be used in blueprints for the products you create.",
-      href: "/help/blueprints",
+        "Materials can be used in recipes for the products you create.",
+      href: "/help/recipes",
     },
   ];
   return (
