@@ -45,7 +45,7 @@ function CustomToast({
   const { icon, color } = getStyles();
 
   const containerBg = useColorModeValue(`${color}.50`, `${color}.950`);
-  const borderColor = useColorModeValue(`${color}.20`, `${color}.900`);
+  const borderColor = useColorModeValue(`${color}.200`, `${color}.900`);
   const descriptionColor = useColorModeValue("zinc.600", "zinc.300");
 
   return (
