@@ -83,7 +83,7 @@ export function CreateMaterialForm() {
               <TextInput control={control} name="sku" label="SKU" />
 
               <FormControl isInvalid={!!errors.cost}>
-                <FormLabel>Cost {typeof watch("cost")}</FormLabel>
+                <FormLabel>Cost</FormLabel>
                 <Controller
                   control={control}
                   name="cost"
