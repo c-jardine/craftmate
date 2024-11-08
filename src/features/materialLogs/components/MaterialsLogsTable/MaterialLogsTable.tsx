@@ -41,7 +41,6 @@ export function MaterialLogsTable() {
   // Update table data when the data is available
   useEffect(() => {
     if (updates) {
-      console.log("DATA", updates);
       setRowData(
         updates.map((update) => ({
           ...update,
