@@ -6,6 +6,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   createMaterialFormSchema,
   deleteCategoryByNameSchema,
+  deleteMaterialSchema,
   importMaterialsSchema,
   newQuantityAdjustmentActionSchema,
   updateCategoriesFormSchema,
@@ -125,6 +126,16 @@ export const materialRouter = createTRPCRouter({
         }
       }
     ),
+
+  deleteById: protectedProcedure
+    .input(deleteMaterialSchema)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.material.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 
   deleteAll: protectedProcedure
     .input(z.string().array())

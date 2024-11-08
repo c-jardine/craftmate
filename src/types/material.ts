@@ -57,6 +57,12 @@ export const updateMaterialFormSchema = z.object({
 
 export type UpdateMaterialFormType = z.infer<typeof updateMaterialFormSchema>;
 
+export const deleteMaterialSchema = z.object({
+  id: z.string(),
+});
+
+export type DeleteMaterialType = z.infer<typeof deleteMaterialSchema>;
+
 export const updateMaterialQuantityFormSchema = z.object({
   materialId: z.string(),
   type: z.object({

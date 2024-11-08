@@ -13,7 +13,6 @@ import {
   IconButton,
   Menu,
   MenuButton,
-  MenuItem,
   MenuList,
   SimpleGrid,
   Stack,
@@ -22,7 +21,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { type ReactNode } from "react";
-import { FaEllipsis, FaTrash } from "react-icons/fa6";
+import { FaEllipsis } from "react-icons/fa6";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
@@ -31,6 +30,7 @@ import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
 import { toNumber } from "~/utils/prisma";
 import { type MaterialsTableRows } from "../MaterialsTable/MaterialsTable";
 import { UpdateMaterialForm } from "../UpdateMaterialForm/UpdateMaterialForm";
+import DeleteMaterialButton from "./DeleteMaterialButton";
 import MaterialUpdateLogs from "./MaterialUpdateLogs";
 
 function Detail({ title, details }: { title: string; details: ReactNode }) {
@@ -112,9 +112,7 @@ export function MaterialViewer(
                     aria-label="More options"
                   />
                   <MenuList>
-                    <MenuItem icon={<Icon as={FaTrash} />}>
-                      Delete material
-                    </MenuItem>
+                    <DeleteMaterialButton id={props.id} name={props.name} />
                   </MenuList>
                 </Menu>
               </HStack>
