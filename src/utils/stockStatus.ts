@@ -13,8 +13,11 @@ function calculateStockStatus(
     return "Out of stock";
   }
 
-  const ratio = quantity.div(minQuantity);
-  if (ratio.lessThanOrEqualTo(0.5)) {
+  // const ratio = quantity.div(minQuantity);
+  // if (ratio.lessThanOrEqualTo(0.5)) {
+  //   return "Low stock";
+  // }
+  if (quantity.lessThan(minQuantity)) {
     return "Low stock";
   }
 
