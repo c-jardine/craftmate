@@ -35,7 +35,7 @@ export const materialRouter = createTRPCRouter({
               vendor: {
                 connectOrCreate: {
                   where: {
-                    id: vendor.label,
+                    name: vendor.value,
                   },
                   create: {
                     name: vendor.label,
