@@ -11,7 +11,6 @@ import {
   type UseToastOptions,
 } from "@chakra-ui/react";
 import { FaCheck, FaEllipsis, FaExclamation, FaInfo } from "react-icons/fa6";
-import { IoMdClose } from "react-icons/io";
 
 export const toastOptions: ToastProviderProps = {
   defaultOptions: {
@@ -44,9 +43,13 @@ function CustomToast({
   }
   const { icon, color } = getStyles();
 
-  const containerBg = useColorModeValue(`${color}.50`, `${color}.950`);
-  const borderColor = useColorModeValue(`${color}.200`, `${color}.900`);
+  const containerBg = useColorModeValue("white", "black");
+  const borderColor = useColorModeValue(`zinc.100`, `zinc.900`);
   const descriptionColor = useColorModeValue("zinc.600", "zinc.300");
+  const shadow = useColorModeValue(
+    "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+    "rgba(26, 24, 22, 0.2) 0px 8px 24px"
+  );
 
   return (
     <Box
@@ -58,6 +61,7 @@ function CustomToast({
       overflow="hidden"
       maxW="sm"
       w="full"
+      shadow={shadow}
       onClick={onClose}
     >
       <HStack>
@@ -66,33 +70,15 @@ function CustomToast({
             <Icon as={icon} boxSize={3} color={`${color}.600`} />
           </Circle>
         </Box>
-        <Stack w="full" px={2} py={4}>
+        <Stack w="full" pl={2} pr={4} py={4}>
           <Flex justifyContent="space-between" alignItems="center" w="full">
-            <Text fontSize="sm" fontWeight="semibold">
+            <Text fontSize="sm" fontWeight="bold" color={`${color}.600`}>
               {title}
             </Text>
           </Flex>
-          <Text mt={-1} fontSize="xs" color={descriptionColor}>
+          <Text mt={-1} fontSize="sm" color={descriptionColor}>
             {description}
           </Text>
-        </Stack>
-        <Stack
-          as="button"
-          aria-label="Close toast"
-          px={2}
-          py={4}
-          alignSelf="stretch"
-          justifyContent="center"
-          alignItems="center"
-          borderLeft="1px solid"
-          borderColor={borderColor}
-          transitionDuration="200ms"
-          _hover={{
-            bg: `${color}.100`,
-          }}
-          onClick={onClose}
-        >
-          <Icon as={IoMdClose} color={`${color}.600`} boxSize={4} />
         </Stack>
       </HStack>
     </Box>
