@@ -9,7 +9,7 @@ interface FormattedGroup {
 }
 
 export function useQuantityUnitOptions() {
-  const query = api.quantityUnits.getAll.useQuery();
+  const query = api.quantityUnit.getAll.useQuery();
 
   const { data } = query;
 

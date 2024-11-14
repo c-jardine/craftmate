@@ -1,7 +1,7 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 import { materialRouter } from "~/server/api/routers/material";
-import { quantityUnitsRouter } from "./routers/quantityUnits";
+import { quantityUnitRouter } from "./routers/quantity-unit";
 
 /**
  * This is the primary router for your server.
@@ -10,7 +10,7 @@ import { quantityUnitsRouter } from "./routers/quantityUnits";
  */
 export const appRouter = createTRPCRouter({
   material: materialRouter,
-  quantityUnits: quantityUnitsRouter,
+  quantityUnit: quantityUnitRouter,
 });
 
 // export type definition of API

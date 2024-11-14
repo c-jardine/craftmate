@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const quantityUnitsRouter = createTRPCRouter({
+export const quantityUnitRouter = createTRPCRouter({
   getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.quantityUnit.findMany({
       orderBy: {
