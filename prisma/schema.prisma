@@ -121,6 +121,12 @@ model ProductCategory {
     products Product[]
 }
 
+model RecipeCategory {
+    id      String   @id @default(uuid())
+    name    String   @unique
+    recipes Recipe[]
+}
+
 model Vendor {
     id        String     @id @default(uuid())
     name      String     @unique
@@ -139,6 +145,7 @@ model Recipe {
     batchSize       Decimal
     batchSizeUnit   QuantityUnit     @relation(fields: [batchSizeUnitId], references: [id])
     batchSizeUnitId String
+    categories      RecipeCategory[]
     notes           String?
 
     createdAt   DateTime @default(now())
