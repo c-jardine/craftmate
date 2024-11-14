@@ -1,11 +1,11 @@
 import {
-  MaterialQuantityUnit,
+  type QuantityUnit,
   MaterialQuantityUpdateAction,
-  MaterialQuantityUpdateType,
+  type MaterialQuantityUpdateType,
 } from "@prisma/client";
 import { db } from "~/server/db";
 
-const quantityUnits: Omit<MaterialQuantityUnit, "id">[] = [
+const quantityUnits: Omit<QuantityUnit, "id">[] = [
   {
     group: "Length",
     name: "Inches",
@@ -298,7 +298,7 @@ async function main() {
   await Promise.all(
     quantityUnits.map(
       async (unit) =>
-        await db.materialQuantityUnit.upsert({
+        await db.quantityUnit.upsert({
           where: {
             name: unit.name,
           },
