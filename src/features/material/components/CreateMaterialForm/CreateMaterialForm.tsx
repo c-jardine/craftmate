@@ -37,7 +37,6 @@ export function CreateMaterialForm() {
     form: {
       control,
       register,
-      watch,
       handleSubmit,
       formState: { errors, isSubmitting },
     },
