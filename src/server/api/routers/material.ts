@@ -410,14 +410,6 @@ export const materialRouter = createTRPCRouter({
       );
     }),
 
-  getQuantityUnits: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db.materialQuantityUnit.findMany({
-      orderBy: {
-        group: "asc",
-      },
-    });
-  }),
-
   getLatest: protectedProcedure.query(async ({ ctx }) => {
     const material = await ctx.db.material.findFirst({
       orderBy: { createdAt: "desc" },

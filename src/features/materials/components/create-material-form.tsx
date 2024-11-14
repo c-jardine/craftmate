@@ -25,11 +25,11 @@ import { NumericFormat } from "react-number-format";
 import { ControlledCreatableSelect } from "~/components/controlled-creatable-select";
 import { ControlledSelect } from "~/components/controlled-select";
 import { TextInput } from "~/components/text-input";
+import { useQuantityUnitOptions } from "~/hooks/use-quantity-unit-options";
 import { type CreateMaterialFormType } from "~/types/material";
 import { type SelectInput } from "~/utils/selectInput";
 import { useCreateMaterial } from "../hooks/use-create-material";
 import { useMaterialCategoriesOptions } from "../hooks/use-material-categories-options";
-import { useMaterialQuantityUnitOptions } from "../hooks/use-material-quantity-unit-options";
 import { useMaterialVendorsOptions } from "../hooks/use-material-vendors-options";
 
 export function CreateMaterialForm() {
@@ -44,7 +44,7 @@ export function CreateMaterialForm() {
     disclosure: { isOpen, onOpen, onClose },
   } = useCreateMaterial();
 
-  const { quantityUnitOptions } = useMaterialQuantityUnitOptions();
+  const { quantityUnitOptions } = useQuantityUnitOptions();
   const { vendorOptions } = useMaterialVendorsOptions();
   const { categoryOptions } = useMaterialCategoriesOptions();
 

@@ -1,5 +1,7 @@
-import { materialRouter } from "~/server/api/routers/material";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+
+import { materialRouter } from "~/server/api/routers/material";
+import { quantityUnitsRouter } from "./routers/quantityUnits";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +10,7 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   material: materialRouter,
+  quantityUnits: quantityUnitsRouter,
 });
 
 // export type definition of API

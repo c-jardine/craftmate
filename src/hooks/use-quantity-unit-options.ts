@@ -8,8 +8,8 @@ interface FormattedGroup {
   options: SelectInput[];
 }
 
-export function useMaterialQuantityUnitOptions() {
-  const query = api.material.getQuantityUnits.useQuery();
+export function useQuantityUnitOptions() {
+  const query = api.quantityUnits.getAll.useQuery();
 
   const { data } = query;
 
