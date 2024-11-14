@@ -11,8 +11,8 @@ import NextLink from "next/link";
 import { FaHistory } from "react-icons/fa";
 import { FaEllipsis } from "react-icons/fa6";
 
-import { PageHeader } from "~/components/PageHeader";
-import { CreateRecipeForm } from "~/features/recipe/components/CreateRecipeForm";
+import { PageHeader } from "~/components/page-header";
+import { CreateRecipeForm } from "~/features/recipes/components/create-recipe-form";
 import { withAuth } from "~/server/auth";
 
 export default function Recipes() {
