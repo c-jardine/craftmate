@@ -125,9 +125,24 @@ model Vendor {
 }
 
 model Recipe {
-    id String @id @default(uuid())
-    name String @unique
+    id              String   @id @default(uuid())
+    name            String   @unique
+    batchSize       Decimal
+    // batchSizeUnit MaterialQuantityUnit @relation(fields: [batchSizeUnitId], references: [id])
+    batchSizeUnitId String
+    // materials RecipeMaterial[]
+    createdAt       DateTime @default(now())
+    updatedAt       DateTime @updatedAt
+
+    createdBy   User   @relation("createdBy", fields: [createdById], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    createdById String
+    updatedBy   User   @relation("updatedBy", fields: [updatedById], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    updatedById String
 }
+
+// model RecipeMaterial {
+// 
+// }
 
 model UserSettings {
     userId String
@@ -175,6 +190,8 @@ model User {
     sessions                Session[]
     materialsCreated        Material[]                  @relation("createdBy")
     materialsUpdated        Material[]                  @relation("updatedBy")
+    recipesCreated          Recipe[]                    @relation("createdBy")
+    recipesUpdated          Recipe[]                    @relation("updatedBy")
     products                Product[]
     materialQuantityUpdates MaterialQuantityUpdateLog[] @relation("createdBy")
 }
