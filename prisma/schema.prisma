@@ -124,6 +124,11 @@ model Vendor {
     materials Material[]
 }
 
+model Recipe {
+    id String @id @default(uuid())
+    name String @unique
+}
+
 model UserSettings {
     userId String
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
