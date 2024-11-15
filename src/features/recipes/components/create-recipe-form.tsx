@@ -11,6 +11,7 @@ import {
   FormErrorMessage,
   FormLabel,
   Icon,
+  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
@@ -20,7 +21,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Controller } from "react-hook-form";
-import { FaDollarSign, FaPlus } from "react-icons/fa6";
+import { FaDollarSign, FaPlus, FaX } from "react-icons/fa6";
 import { NumericFormat } from "react-number-format";
 
 import { ControlledCreatableSelect } from "~/components/controlled-creatable-select";
@@ -179,7 +180,11 @@ export function CreateRecipeForm() {
                     watch(`materials.${index}`)?.material?.value?.quantityUnit
                       ?.abbrevPlural ?? "units";
                   return (
-                    <SimpleGrid key={field.id} columns={5} gap={4}>
+                    <SimpleGrid
+                      key={field.id}
+                      gridTemplateColumns="repeat(5, 1fr) auto"
+                      gap={4}
+                    >
                       <Box gridColumn="1 / span 3">
                         <ControlledSelect
                           control={control}
@@ -214,6 +219,18 @@ export function CreateRecipeForm() {
                           )}
                         />
                       </Box>
+
+                      <IconButton
+                        icon={<Icon as={FaX} fontSize="2xs" />}
+                        aria-label="Remove"
+                        size="xs"
+                        alignSelf="center"
+                        rounded="full"
+                        variant="outline"
+                        colorScheme={index === 0 ? "blackAlpha" : "red"}
+                        isDisabled={index === 0}
+                        onClick={() => remove(index)}
+                      />
                     </SimpleGrid>
                   );
                 })}
