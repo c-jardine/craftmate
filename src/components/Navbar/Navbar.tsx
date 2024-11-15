@@ -1,6 +1,6 @@
 import { Container, Flex, useColorModeValue } from "@chakra-ui/react";
 
-import { DesktopNavbar } from "./DesktopNavbar";
+import { DesktopNavbar } from "./desktop-navbar";
 
 export function Navbar() {
   const bgColor = useColorModeValue("white", "zinc.900");

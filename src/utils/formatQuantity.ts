@@ -1,11 +1,11 @@
-import { type MaterialQuantityUnit, Prisma } from "@prisma/client";
+import { type QuantityUnit, Prisma } from "@prisma/client";
 import { Character } from "./text";
 
 interface FormatQuantityWithUnitOptions {
   /** The quantity, used to determine if the unit should be singular or plural. */
   quantity: Prisma.Decimal;
   /** The quantity unit object. */
-  quantityUnit: MaterialQuantityUnit;
+  quantityUnit: QuantityUnit;
   /**
    * The style in which the units should be displayed. "name" is generally the
    * full, plural form. "full" is the full unit name (ounce, ounces, etc.).
@@ -50,7 +50,7 @@ interface FormatQuantityWithUnitAbbrevOptions {
   /** The quantity, used to determine if the unit should be singular or plural. */
   quantity: Prisma.Decimal | null;
   /** The quantity unit object. */
-  quantityUnit: MaterialQuantityUnit;
+  quantityUnit: QuantityUnit;
 }
 
 /**

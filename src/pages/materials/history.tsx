@@ -2,8 +2,8 @@ import { Button, Icon, IconButton, Stack } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FaArrowLeft } from "react-icons/fa6";
 
-import { PageHeader } from "~/components/PageHeader";
-import { MaterialLogsTable } from "~/features/materialLogs/components/MaterialsLogsTable";
+import { PageHeader } from "~/components/page-header";
+import { MaterialLogsTable } from "~/features/materials-history/components/material-logs-table";
 import { withAuth } from "~/server/auth";
 
 export default function MaterialHistory() {

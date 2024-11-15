@@ -12,12 +12,11 @@ import NextLink from "next/link";
 import { FaHistory } from "react-icons/fa";
 import { FaEllipsis } from "react-icons/fa6";
 
-import { PageHeader } from "~/components/PageHeader";
-import { CreateMaterialForm } from "~/features/material/components/CreateMaterialForm";
-import { ImportCsvMenuButton } from "~/features/material/components/ImportCsvMenuButton";
-import { ManageCategories } from "~/features/material/components/ManageCategories";
-import { ManageVendors } from "~/features/material/components/ManageVendors";
-import { MaterialsTable } from "~/features/material/components/MaterialsTable/MaterialsTable";
+import { PageHeader } from "~/components/page-header";
+import { CreateMaterialForm } from "~/features/materials/components/create-material-form";
+import { ManageCategories } from "~/features/materials/components/manage-categories";
+import { ManageVendors } from "~/features/materials/components/manage-vendors";
+import { MaterialsTable } from "~/features/materials/components/materials-table";
 import { withAuth } from "~/server/auth";
 
 export default function Materials() {
@@ -38,7 +37,6 @@ export default function Materials() {
               >
                 View history
               </MenuItem>
-              <ImportCsvMenuButton />
               <MenuDivider />
               <ManageVendors />
               <ManageCategories />

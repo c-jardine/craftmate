@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import { Section } from "~/components/Section";
+import { PageSection } from "~/components/page-section";
 
 interface LinkCardProps {
   title: string;
@@ -100,7 +100,13 @@ export default function Help() {
         />
       </Head>
       <main>
-        <Section display="flex" justifyContent="center" mt={6} mb={8} py={16}>
+        <PageSection
+          display="flex"
+          justifyContent="center"
+          mt={6}
+          mb={8}
+          py={16}
+        >
           <Stack spacing={8} maxW="container.sm" w="full">
             <Heading as="h1" textAlign="center">
               Craftmate Help Center
@@ -115,7 +121,7 @@ export default function Help() {
               </Button>
             </HStack>
           </Stack>
-        </Section>
+        </PageSection>
 
         <SimpleGrid as={Container} columns={3} gap={4} maxW="container.lg">
           {sections.map((section) => (

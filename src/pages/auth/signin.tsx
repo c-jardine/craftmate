@@ -8,7 +8,8 @@ import { getProviders, signIn } from "next-auth/react";
 import { FaSignInAlt } from "react-icons/fa";
 import { FaApple, FaDiscord } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
-import { Section } from "~/components/Section";
+
+import { PageSection } from "~/components/page-section";
 import { authOptions } from "~/server/auth";
 
 const getIcon = (providerName: string) => {
@@ -28,7 +29,7 @@ export default function SignIn({
   providers,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <Stack as={Section} mt={8} gap={6} p={8} maxW="lg">
+    <Stack as={PageSection} mt={8} gap={6} p={8} maxW="lg">
       <Stack>
         <Stack
           justifyContent="center"

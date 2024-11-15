@@ -1,5 +1,8 @@
-import { materialRouter } from "~/server/api/routers/material";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+
+import { materialRouter } from "~/server/api/routers/material";
+import { quantityUnitRouter } from "./routers/quantity-unit";
+import { recipeRouter } from "./routers/recipe";
 
 /**
  * This is the primary router for your server.
@@ -7,7 +10,9 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+  quantityUnit: quantityUnitRouter,
   material: materialRouter,
+  recipe: recipeRouter,
 });
 
 // export type definition of API
