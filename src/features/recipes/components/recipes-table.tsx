@@ -3,11 +3,19 @@ import { useEffect, useState } from "react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
-import { type ColDef } from "node_modules/ag-grid-community/dist/types/core/main";
+import {
+  ValueFormatterParams,
+  type ColDef,
+} from "node_modules/ag-grid-community/dist/types/core/main";
 
-import { api, type RouterOutputs } from "~/utils/api";
+import { Prisma } from "@prisma/client";
 import PuffLoader from "react-spinners/PuffLoader";
 import { Table } from "~/components/table";
+import { api, type RouterOutputs } from "~/utils/api";
+import { formatCurrency } from "~/utils/currency";
+import { Character } from "~/utils/text";
+import { CostPerUnitRenderer } from "./cost-per-unit-renderer";
+import { NameRenderer } from "./name-renderer";
 
 // Table column type definition
 export type RecipesTableRows = RouterOutputs["recipe"]["getAll"][0];
@@ -46,6 +54,48 @@ export function RecipesTable() {
       flex: 1,
       headerCheckboxSelection: true,
       checkboxSelection: true,
+      cellRenderer: NameRenderer,
+    },
+    {
+      headerName: "Cost per unit",
+      field: "id", // TODO: wrong field
+      cellRenderer: CostPerUnitRenderer,
+    },
+    {
+      headerName: "MSRP",
+      field: "retailPrice",
+      cellStyle: {
+        display: "flex",
+        alignItems: "center",
+      },
+      valueFormatter: (
+        params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+      ) => {
+        if (!params.value || !params.data) {
+          return Character.EM_DASH;
+        }
+        return `${formatCurrency(
+          new Prisma.Decimal(params.value).toNumber()
+        )} /${params.data.batchSizeUnit.abbrevSingular}`;
+      },
+    },
+    {
+      headerName: "Wholesale Price",
+      field: "wholesalePrice",
+      cellStyle: {
+        display: "flex",
+        alignItems: "center",
+      },
+      valueFormatter: (
+        params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+      ) => {
+        if (!params.value || !params.data) {
+          return Character.EM_DASH;
+        }
+        return `${formatCurrency(
+          new Prisma.Decimal(params.value).toNumber()
+        )} /${params.data.batchSizeUnit.abbrevSingular}`;
+      },
     },
   ];
 
@@ -66,11 +116,11 @@ export function RecipesTable() {
     <Table<RecipesTableRows>
       rowData={rowData}
       columnDefs={colDefs}
-    //   autoSizeStrategy={{
-    //     type: "fitCellContents",
-    //     colIds: ["status", "quantity", "minQuantity", "cost", "vendor"],
-    //   }}
-    //   onDelete={onDelete}
+      autoSizeStrategy={{
+        type: "fitCellContents",
+        colIds: ["id", "retailPrice", "wholesalePrice"],
+      }}
+      // onDelete={onDelete}
     />
   );
 }

@@ -55,7 +55,11 @@ export const recipeRouter = createTRPCRouter({
     const recipes = await ctx.db.recipe.findMany({
       orderBy: { name: "asc" },
       include: {
-        materials: true,
+        materials: {
+          include: {
+            material: true
+          }
+        },
         batchSizeUnit: true,
         categories: true,
       },
