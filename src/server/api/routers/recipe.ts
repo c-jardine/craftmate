@@ -9,10 +9,29 @@ export const recipeRouter = createTRPCRouter({
       async ({
         ctx,
         input: { materials, batchSizeUnit, categories, ...rest },
-      }) => {
-        return db.recipe.create({
+      }) =>
+        db.recipe.create({
           data: {
             ...rest,
+            materials: {
+              create: materials.map(({ material, quantity }) => {
+                return {
+                  ...(material && {
+                    material: {
+                      connect: {
+                        id: material.value.id,
+                      },
+                    },
+                    quantity,
+                    quantityUnit: {
+                      connect: {
+                        id: material.value.quantityUnitId,
+                      },
+                    },
+                  }),
+                };
+              }),
+            },
             batchSizeUnit: {
               connect: {
                 name: batchSizeUnit.value,
@@ -29,8 +48,7 @@ export const recipeRouter = createTRPCRouter({
             createdBy: { connect: { id: ctx.session.user.id } },
             updatedBy: { connect: { id: ctx.session.user.id } },
           },
-        });
-      }
+        })
     ),
 
   getAll: protectedProcedure.query(async ({ ctx }) => {

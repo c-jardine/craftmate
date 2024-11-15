@@ -1,8 +1,9 @@
 import { useDisclosure, useToast } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/utils/api";
-import { type CreateRecipeFormType } from "../types";
+import { createRecipeFormSchema, type CreateRecipeFormType } from "../types";
 
 export function useCreateRecipe() {
   const disclosure = useDisclosure();
@@ -10,7 +11,21 @@ export function useCreateRecipe() {
   const utils = api.useUtils();
 
   // Form
-  const form = useForm<CreateRecipeFormType>();
+  const form = useForm<CreateRecipeFormType>({
+    defaultValues: {
+      materials: [
+        {
+          material: undefined,
+          quantity: undefined,
+        },
+      ],
+    },
+    resolver: zodResolver(createRecipeFormSchema),
+  });
+  const fieldArray = useFieldArray({
+    control: form.control,
+    name: "materials",
+  });
 
   const mutation = api.recipe.create.useMutation({
     onSuccess: async (data) => {
@@ -22,7 +37,7 @@ export function useCreateRecipe() {
       disclosure.onClose();
       form.reset();
       await utils.recipe.getAll.invalidate();
-      // await utils.recipe.getCategories.invalidate();
+      await utils.recipe.getCategories.invalidate();
     },
     onError: (error) => {
       toast({
@@ -34,11 +49,12 @@ export function useCreateRecipe() {
   });
 
   async function onSubmit(data: CreateRecipeFormType) {
-    await mutation.mutateAsync(data);
+    return await mutation.mutateAsync(data);
   }
 
   return {
     form,
+    fieldArray,
     onSubmit,
     disclosure,
   };

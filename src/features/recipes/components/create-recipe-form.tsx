@@ -14,6 +14,7 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  InputRightElement,
   SimpleGrid,
   Stack,
   Text,
@@ -25,6 +26,7 @@ import { NumericFormat } from "react-number-format";
 import { ControlledCreatableSelect } from "~/components/controlled-creatable-select";
 import { ControlledSelect } from "~/components/controlled-select";
 import { TextInput } from "~/components/text-input";
+import { useMaterialOptions } from "~/hooks/use-material-options";
 import { useQuantityUnitOptions } from "~/hooks/use-quantity-unit-options";
 import { type SelectInput } from "~/utils/selectInput";
 import { useCreateRecipe } from "../hooks/use-create-recipe";
@@ -37,13 +39,16 @@ export function CreateRecipeForm() {
       control,
       register,
       handleSubmit,
+      watch,
       formState: { errors, isSubmitting },
     },
+    fieldArray: { fields, append, remove },
     onSubmit,
     disclosure: { isOpen, onOpen, onClose },
   } = useCreateRecipe();
 
   const { quantityUnitOptions } = useQuantityUnitOptions();
+  const { materialOptions } = useMaterialOptions();
   const { categoryOptions } = useRecipeCategoriesOptions();
 
   return (
@@ -166,6 +171,80 @@ export function CreateRecipeForm() {
                   />
                 </Box>
               </SimpleGrid>
+
+              <Stack>
+                <FormLabel>Materials</FormLabel>
+                {fields.map((field, index) => {
+                  const units =
+                    watch(`materials.${index}`)?.material?.value?.quantityUnit
+                      ?.abbrevPlural ?? "units";
+                  return (
+                    <SimpleGrid key={field.id} columns={5} gap={4}>
+                      <Box gridColumn="1 / span 3">
+                        <ControlledSelect
+                          control={control}
+                          name={`materials.${index}.material`}
+                          options={materialOptions}
+                          noOptionsMessage={() => (
+                            <Text>No materials found.</Text>
+                          )}
+                        />
+                      </Box>
+
+                      <Box gridColumn="4 / span 2">
+                        <Controller
+                          control={control}
+                          name={`materials.${index}.quantity`}
+                          render={({ field: { value, onChange, onBlur } }) => (
+                            <InputGroup>
+                              <Input
+                                variant="input"
+                                as={NumericFormat}
+                                allowNegative={false}
+                                decimalScale={2}
+                                thousandSeparator=","
+                                value={value}
+                                onChange={onChange}
+                                onBlur={onBlur}
+                              />
+                              <InputRightElement pointerEvents="none">
+                                {units && <Text fontSize="xs">{units}</Text>}
+                              </InputRightElement>
+                            </InputGroup>
+                          )}
+                        />
+                      </Box>
+                    </SimpleGrid>
+                  );
+                })}
+                <Button
+                  leftIcon={<Icon as={FaPlus} />}
+                  onClick={() =>
+                    append({
+                      // TODO: Fix this...
+                      material: undefined,
+                      quantity: undefined,
+                    })
+                  }
+                  isDisabled={(() => {
+                    const length = watch("materials").length;
+                    const lastMaterial = watch("materials")[length - 1];
+
+                    if (lastMaterial) {
+                      const { material, quantity } = lastMaterial;
+                      if (material?.label && quantity) {
+                        return false;
+                      }
+
+                      return true;
+                    }
+
+                    return true;
+                  })()}
+                >
+                  Add material
+                </Button>
+              </Stack>
 
               <ControlledCreatableSelect<
                 CreateRecipeFormType,

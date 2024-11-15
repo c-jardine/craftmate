@@ -1,3 +1,4 @@
+import type { Material, QuantityUnit } from "@prisma/client";
 import { z } from "zod";
 import { CustomZod } from "~/utils/zod";
 
@@ -9,12 +10,11 @@ export const createRecipeFormSchema = z.object({
   wholesalePrice: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
   materials: z
     .object({
-      id: z.string(),
-      quantity: CustomZod.PRISMA_POSITIVE_DECIMAL,
-      quantityUnit: z.object({
+      material: z.object({
         label: z.string(),
-        value: z.string(),
+        value: z.custom<Material & { quantityUnit: QuantityUnit }>(),
       }),
+      quantity: CustomZod.PRISMA_POSITIVE_DECIMAL,
     })
     .array(),
   batchSize: CustomZod.PRISMA_POSITIVE_DECIMAL,

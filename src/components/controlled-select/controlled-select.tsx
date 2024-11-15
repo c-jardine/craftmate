@@ -94,8 +94,8 @@ export function ControlledSelect<
             fontSize: "sm",
           }),
         }}
-        {...selectProps}
         {...field}
+        {...selectProps}
       />
       {error && <FormErrorMessage>{error.message}</FormErrorMessage>}
     </FormControl>

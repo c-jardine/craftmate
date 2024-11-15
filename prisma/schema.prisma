@@ -143,7 +143,7 @@ model Recipe {
     wholesalePrice  Decimal?
     materials       RecipeMaterial[]
     batchSize       Decimal
-    batchSizeUnit   QuantityUnit     @relation(fields: [batchSizeUnitId], references: [id])
+    batchSizeUnit   QuantityUnit     @relation(fields: [batchSizeUnitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     batchSizeUnitId String
     categories      RecipeCategory[]
     notes           String?
@@ -158,10 +158,10 @@ model Recipe {
 
 model RecipeMaterial {
     id             String       @id @default(uuid())
-    material       Material     @relation(fields: [materialId], references: [id])
+    material       Material     @relation(fields: [materialId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     materialId     String
     quantity       Decimal
-    quantityUnit   QuantityUnit @relation(fields: [quantityUnitId], references: [id])
+    quantityUnit   QuantityUnit @relation(fields: [quantityUnitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     quantityUnitId String
     recipes        Recipe[]
 }
