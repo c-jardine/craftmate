@@ -20,19 +20,15 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { Prisma } from "@prisma/client";
 import { type ReactNode } from "react";
 import { FaEllipsis } from "react-icons/fa6";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { Prisma } from "@prisma/client";
 import { formatCurrency } from "~/utils/currency";
 import { Character } from "~/utils/text";
-import { RecipesTableRows } from "./recipes-table";
-// import { DeleteMaterialButton } from "./delete-material-button";
-// import { MaterialUpdateLogs } from "./material-update-logs";
-// import { type MaterialsTableRows } from "./materials-table";
-// import { UpdateMaterialForm } from "./update-material-form";
+import { type RecipesTableRows } from "./recipes-table";
 
 function Detail({ title, details }: { title: string; details: ReactNode }) {
   return (
@@ -60,20 +56,10 @@ export function RecipeViewer(
     upc,
     retailPrice,
     wholesalePrice,
-    batchSize,
+    costPerUnit,
     batchSizeUnit,
-    materials,
     categories,
   } = props;
-
-  const totalCost = materials.reduce((acc, recipeMaterial) => {
-    const quantity = new Prisma.Decimal(recipeMaterial.quantity);
-    const costPerUnit = recipeMaterial.material.cost ?? 0;
-    const totalMaterialCost = quantity.times(costPerUnit);
-    return acc.plus(totalMaterialCost);
-  }, new Prisma.Decimal(0));
-
-  const costPerUnit = totalCost.div(batchSize);
 
   return (
     <>
@@ -126,9 +112,9 @@ export function RecipeViewer(
               <SimpleGrid columns={3} gap={4}>
                 <Detail
                   title="Cost per unit"
-                  details={`${formatCurrency(costPerUnit.toNumber())} /${
-                    batchSizeUnit.abbrevSingular
-                  }`}
+                  details={`${formatCurrency(
+                    new Prisma.Decimal(costPerUnit).toNumber()
+                  )} /${batchSizeUnit.abbrevSingular}`}
                 />
                 <Detail
                   title="MSRP"

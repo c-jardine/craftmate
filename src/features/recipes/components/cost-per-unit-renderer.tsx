@@ -1,10 +1,10 @@
 import { HStack, Text } from "@chakra-ui/react";
+import { Prisma } from "@prisma/client";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { Prisma } from "@prisma/client";
-import { type RecipesTableRows } from "./recipes-table";
 import { formatCurrency } from "~/utils/currency";
+import { type RecipesTableRows } from "./recipes-table";
 
 export function CostPerUnitRenderer({
   node,
@@ -13,16 +13,7 @@ export function CostPerUnitRenderer({
     return null;
   }
 
-  const { batchSize, batchSizeUnit, materials } = node.data;
-
-  const totalCost = materials.reduce((acc, recipeMaterial) => {
-    const quantity = new Prisma.Decimal(recipeMaterial.quantity);
-    const costPerUnit = recipeMaterial.material.cost ?? 0;
-    const totalMaterialCost = quantity.times(costPerUnit);
-    return acc.plus(totalMaterialCost);
-  }, new Prisma.Decimal(0));
-
-  const costPerUnit = totalCost.div(batchSize);
+  const { batchSizeUnit, costPerUnit } = node.data;
 
   return (
     <HStack
@@ -32,7 +23,8 @@ export function CostPerUnitRenderer({
       wrap="wrap"
     >
       <Text>
-        {formatCurrency(costPerUnit.toNumber())} /{batchSizeUnit.abbrevSingular}
+        {formatCurrency(new Prisma.Decimal(costPerUnit).toNumber())} /
+        {batchSizeUnit.abbrevSingular}
       </Text>
     </HStack>
   );

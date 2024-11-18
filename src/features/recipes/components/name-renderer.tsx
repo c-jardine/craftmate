@@ -14,7 +14,7 @@ export function NameRenderer({
     return null;
   }
 
-  const { name, sku, upc, categories } = node.data;
+  const { sku, categories } = node.data;
 
   return (
     <HStack

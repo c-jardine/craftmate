@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { createRecipeFormSchema } from "~/features/recipes/types";
 import { db } from "~/server/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -9,10 +10,19 @@ export const recipeRouter = createTRPCRouter({
       async ({
         ctx,
         input: { materials, batchSizeUnit, categories, ...rest },
-      }) =>
-        db.recipe.create({
+      }) => {
+        const totalCost = materials.reduce((acc, recipeMaterial) => {
+          const quantity = new Prisma.Decimal(recipeMaterial.quantity);
+          const costPerUnit = recipeMaterial.material.value.cost ?? 0;
+          const totalMaterialCost = quantity.times(costPerUnit);
+          return acc.plus(totalMaterialCost);
+        }, new Prisma.Decimal(0));
+
+        const costPerUnit = totalCost.div(rest.batchSize);
+        return db.recipe.create({
           data: {
             ...rest,
+            costPerUnit,
             materials: {
               create: materials.map(({ material, quantity }) => {
                 return {
@@ -48,7 +58,8 @@ export const recipeRouter = createTRPCRouter({
             createdBy: { connect: { id: ctx.session.user.id } },
             updatedBy: { connect: { id: ctx.session.user.id } },
           },
-        })
+        });
+      }
     ),
 
   getAll: protectedProcedure.query(async ({ ctx }) => {
@@ -57,8 +68,8 @@ export const recipeRouter = createTRPCRouter({
       include: {
         materials: {
           include: {
-            material: true
-          }
+            material: true,
+          },
         },
         batchSizeUnit: true,
         categories: true,
