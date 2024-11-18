@@ -32,3 +32,9 @@ export const createRecipeFormSchema = z.object({
 });
 
 export type CreateRecipeFormType = z.infer<typeof createRecipeFormSchema>;
+
+export const deleteRecipeSchema = z.object({
+  id: z.string(),
+});
+
+export type DeleteRecipeType = z.infer<typeof deleteRecipeSchema>;

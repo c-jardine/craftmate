@@ -28,6 +28,7 @@ import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { formatCurrency } from "~/utils/currency";
 import { Character } from "~/utils/text";
+import { DeleteRecipeButton } from "./delete-recipe-button";
 import { type RecipesTableRows } from "./recipes-table";
 
 function Detail({ title, details }: { title: string; details: ReactNode }) {
@@ -104,7 +105,7 @@ export function RecipeViewer(
                     aria-label="More options"
                   />
                   <MenuList>
-                    {/* <DeleteMaterialButton id={props.id} name={props.name} /> */}
+                    <DeleteRecipeButton id={props.id} name={props.name} />
                   </MenuList>
                 </Menu>
               </HStack>

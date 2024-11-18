@@ -1,5 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { createRecipeFormSchema } from "~/features/recipes/types";
+import {
+  createRecipeFormSchema,
+  deleteRecipeSchema,
+} from "~/features/recipes/types";
 import { db } from "~/server/db";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -88,4 +91,14 @@ export const recipeRouter = createTRPCRouter({
 
     return categories ?? null;
   }),
+
+  deleteById: protectedProcedure
+    .input(deleteRecipeSchema)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.recipe.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });
