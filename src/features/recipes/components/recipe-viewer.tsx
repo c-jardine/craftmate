@@ -78,7 +78,7 @@ export function RecipeViewer(
         fontSize="sm"
         fontWeight="semibold"
         w="fit-content"
-        px={2}
+        px={0}
         h="fit-content"
         py={"0 !important"}
         onClick={onOpen}

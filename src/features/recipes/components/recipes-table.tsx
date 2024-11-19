@@ -112,6 +112,9 @@ export function RecipesTable() {
         type: "fitCellContents",
         colIds: ["name", "costPerUnit", "retailPrice", "wholesalePrice"],
       }}
+      containerProps={{
+        display: { base: "none", md: "block" },
+      }}
       // onDelete={onDelete}
     />
   );

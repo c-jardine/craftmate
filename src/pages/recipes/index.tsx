@@ -14,6 +14,7 @@ import { FaEllipsis } from "react-icons/fa6";
 
 import { PageHeader } from "~/components/page-header";
 import { CreateRecipeForm } from "~/features/recipes/components/create-recipe-form";
+import { RecipesCards } from "~/features/recipes/components/recipes-cards";
 import { RecipesTable } from "~/features/recipes/components/recipes-table";
 import { withAuth } from "~/server/auth";
 
@@ -43,7 +44,10 @@ export default function Recipes() {
           <CreateRecipeForm />
         </PageHeader.Content>
       </PageHeader>
-      <RecipesTable />
+      <>
+        <RecipesTable />
+        <RecipesCards />
+      </>
     </Stack>
   );
 }
