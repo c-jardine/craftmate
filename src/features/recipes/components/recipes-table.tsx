@@ -110,7 +110,7 @@ export function RecipesTable() {
       columnDefs={colDefs}
       autoSizeStrategy={{
         type: "fitCellContents",
-        colIds: ["name", "costPerUnit", "retailPrice", "wholesalePrice"],
+        colIds: ["costPerUnit", "retailPrice", "wholesalePrice"],
       }}
       containerProps={{
         display: { base: "none", md: "block" },
