@@ -1,5 +1,9 @@
-import { createRecipeFormSchema } from "~/features/recipes/types";
+import {
+  createRecipeFormSchema,
+  deleteRecipeSchema,
+} from "~/features/recipes/types";
 import { db } from "~/server/db";
+import { toDecimal } from "~/utils/prisma";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const recipeRouter = createTRPCRouter({
@@ -9,10 +13,19 @@ export const recipeRouter = createTRPCRouter({
       async ({
         ctx,
         input: { materials, batchSizeUnit, categories, ...rest },
-      }) =>
-        db.recipe.create({
+      }) => {
+        const totalCost = materials.reduce((acc, recipeMaterial) => {
+          const quantity = toDecimal(recipeMaterial.quantity);
+          const costPerUnit = recipeMaterial.material.value.cost ?? 0;
+          const totalMaterialCost = quantity.times(costPerUnit);
+          return acc.plus(totalMaterialCost);
+        }, toDecimal(0));
+
+        const costPerUnit = totalCost.div(rest.batchSize);
+        return db.recipe.create({
           data: {
             ...rest,
+            costPerUnit,
             materials: {
               create: materials.map(({ material, quantity }) => {
                 return {
@@ -48,14 +61,20 @@ export const recipeRouter = createTRPCRouter({
             createdBy: { connect: { id: ctx.session.user.id } },
             updatedBy: { connect: { id: ctx.session.user.id } },
           },
-        })
+        });
+      }
     ),
 
   getAll: protectedProcedure.query(async ({ ctx }) => {
     const recipes = await ctx.db.recipe.findMany({
       orderBy: { name: "asc" },
       include: {
-        materials: true,
+        materials: {
+          include: {
+            material: true,
+            quantityUnit: true,
+          },
+        },
         batchSizeUnit: true,
         categories: true,
       },
@@ -73,4 +92,14 @@ export const recipeRouter = createTRPCRouter({
 
     return categories ?? null;
   }),
+
+  deleteById: protectedProcedure
+    .input(deleteRecipeSchema)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.recipe.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });

@@ -28,11 +28,11 @@ export function calculateAdjustedQuantity({
   }
 
   if (!adjustmentAmount) {
-    return new Prisma.Decimal(previousQuantity);
+    return previousQuantity;
   }
 
-  const prev = new Prisma.Decimal(previousQuantity);
-  const adj = new Prisma.Decimal(adjustmentAmount);
+  const prev = previousQuantity;
+  const adj = adjustmentAmount;
 
   switch (action) {
     case "DECREASE":

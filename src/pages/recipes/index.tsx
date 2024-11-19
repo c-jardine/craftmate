@@ -3,6 +3,7 @@ import {
   IconButton,
   Menu,
   MenuButton,
+  MenuDivider,
   MenuItem,
   MenuList,
   Stack,
@@ -13,6 +14,8 @@ import { FaEllipsis } from "react-icons/fa6";
 
 import { PageHeader } from "~/components/page-header";
 import { CreateRecipeForm } from "~/features/recipes/components/create-recipe-form";
+import { RecipesCards } from "~/features/recipes/components/recipes-cards";
+import { RecipesTable } from "~/features/recipes/components/recipes-table";
 import { withAuth } from "~/server/auth";
 
 export default function Recipes() {
@@ -33,9 +36,7 @@ export default function Recipes() {
               >
                 View history
               </MenuItem>
-              {/* <ImportCsvMenuButton /> */}
-              {/* <MenuDivider /> */}
-              {/* <ManageVendors /> */}
+              <MenuDivider />
               {/* <ManageCategories /> */}
             </MenuList>
           </Menu>
@@ -43,7 +44,10 @@ export default function Recipes() {
           <CreateRecipeForm />
         </PageHeader.Content>
       </PageHeader>
-      {/* <MaterialsTable /> */}
+      <>
+        <RecipesTable />
+        <RecipesCards />
+      </>
     </Stack>
   );
 }

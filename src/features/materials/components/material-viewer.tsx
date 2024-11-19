@@ -17,14 +17,13 @@ import {
   SimpleGrid,
   Stack,
   Tag,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { type ReactNode } from "react";
 import { FaEllipsis } from "react-icons/fa6";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
+import { Detail } from "~/components/detail";
 import { api } from "~/utils/api";
 import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
 import { toNumber } from "~/utils/prisma";
@@ -32,17 +31,6 @@ import { DeleteMaterialButton } from "./delete-material-button";
 import { MaterialUpdateLogs } from "./material-update-logs";
 import { type MaterialsTableRows } from "./materials-table";
 import { UpdateMaterialForm } from "./update-material-form";
-
-function Detail({ title, details }: { title: string; details: ReactNode }) {
-  return (
-    <Stack spacing={0}>
-      <Heading as="h3" fontSize="xs" fontWeight="semibold" color="zinc.400">
-        {title}
-      </Heading>
-      <Text fontSize="xs">{details}</Text>
-    </Stack>
-  );
-}
 
 export function MaterialViewer(
   props: CustomCellRendererProps<MaterialsTableRows>["data"]

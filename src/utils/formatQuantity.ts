@@ -27,7 +27,7 @@ export function formatQuantityWithUnit(options: FormatQuantityWithUnitOptions) {
     return null;
   }
 
-  const q = new Prisma.Decimal(quantity);
+  const q = quantity;
 
   if (style === "name") {
     return quantityUnit.name;

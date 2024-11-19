@@ -34,8 +34,5 @@ export function getStockStatus(
   quantity: Prisma.Decimal | null,
   minQuantity: Prisma.Decimal | null
 ) {
-  return calculateStockStatus(
-    quantity && new Prisma.Decimal(quantity),
-    minQuantity && new Prisma.Decimal(minQuantity)
-  );
+  return calculateStockStatus(quantity, minQuantity);
 }
