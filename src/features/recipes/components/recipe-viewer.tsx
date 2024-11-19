@@ -28,7 +28,7 @@ import { formatCurrency } from "~/utils/currency";
 import { toNumber } from "~/utils/prisma";
 import { Character } from "~/utils/text";
 import { DeleteRecipeButton } from "./delete-recipe-button";
-import { RecipeMaterialsAccordion } from "./recipe-materials-accordion";
+import { RecipeMaterialsCards } from "./recipe-materials-cards";
 import { RecipeMaterialsTable } from "./recipe-materials-table";
 import { type RecipesTableRows } from "./recipes-table";
 
@@ -48,6 +48,7 @@ export function RecipeViewer(
     retailPrice,
     wholesalePrice,
     costPerUnit,
+    batchSize,
     batchSizeUnit,
     materials,
     categories,
@@ -139,23 +140,27 @@ export function RecipeViewer(
                   }`}
                 />
                 <Detail title="Margin" details={marginFormatted} />
+                <Detail
+                  title="Batch size"
+                  details={toNumber(batchSize) ?? Character.EM_DASH}
+                />
                 <Detail title="SKU" details={sku ?? Character.EM_DASH} />
                 <Detail title="UPC" details={upc ?? Character.EM_DASH} />
               </SimpleGrid>
 
+              {/* Materials list */}
               {materials.length > 0 && (
                 <>
                   <Heading as="h2" fontSize="lg">
                     Materials used
                   </Heading>
-                  <>
-                    <RecipeMaterialsTable {...props} />
-                    <RecipeMaterialsAccordion {...props} />
-                  </>
+                  <RecipeMaterialsTable {...props} />
+                  <RecipeMaterialsCards {...props} />
                 </>
               )}
             </Stack>
           </DrawerBody>
+
           <DrawerFooter gap={4}>
             <Button onClick={onClose}>Close</Button>
           </DrawerFooter>
