@@ -1,5 +1,4 @@
 import { Flex, HStack, Icon, Text, useColorModeValue } from "@chakra-ui/react";
-import { Prisma } from "@prisma/client";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
@@ -18,8 +17,8 @@ export function AdjustedQuantityRenderer({
 
   const { originalQuantity, adjustedQuantity, type, material } = node.data;
 
-  const prev = new Prisma.Decimal(originalQuantity);
-  const adj = new Prisma.Decimal(adjustedQuantity);
+  const prev = originalQuantity;
+  const adj = adjustedQuantity;
   const quantityDifference = adj.sub(prev);
 
   const { icon, color } = quantityDifference.isNegative()

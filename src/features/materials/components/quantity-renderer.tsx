@@ -14,7 +14,6 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Prisma } from "@prisma/client";
 import { FaEdit } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa6";
 import { NumericFormat } from "react-number-format";
@@ -24,6 +23,7 @@ import { type CustomCellRendererProps } from "ag-grid-react";
 import { ControlledCreatableSelect } from "~/components/controlled-creatable-select";
 import { TextInput } from "~/components/text-input";
 import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import { toDecimal } from "~/utils/prisma";
 import { calculateAdjustedQuantity } from "~/utils/quantityAdjustment";
 import { useUpdateQuantity } from "../hooks/use-update-quantity";
 import { type MaterialsTableRows } from "./materials-table";
@@ -60,8 +60,8 @@ export function QuantityRenderer({
     quantity &&
     watch("adjustedQuantity") &&
     calculateAdjustedQuantity({
-      previousQuantity: new Prisma.Decimal(quantity),
-      adjustmentAmount: new Prisma.Decimal(
+      previousQuantity: quantity,
+      adjustmentAmount: toDecimal(
         watch("adjustedQuantity").replaceAll(",", "")
       ),
       action: watch("type.value.action"),

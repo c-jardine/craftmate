@@ -9,7 +9,6 @@ import { FaCircle } from "react-icons/fa6";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { Prisma } from "@prisma/client";
 import { type QuantityStatus } from "~/types/status";
 import { getStockStatus } from "~/utils/stockStatus";
 import { Character } from "~/utils/text";
@@ -59,8 +58,7 @@ export function StatusRenderer({
 
   const { quantity, minQuantity } = node.data;
 
-  const stockStatus =
-    quantity && getStockStatus(new Prisma.Decimal(quantity), minQuantity);
+  const stockStatus = quantity && getStockStatus(quantity, minQuantity);
 
   return (
     <Tag fontSize="xs" fontWeight="light" {...getStyles(stockStatus)}>

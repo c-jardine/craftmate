@@ -13,6 +13,7 @@ import PuffLoader from "react-spinners/PuffLoader";
 import { Table } from "~/components/table";
 import { api, type RouterOutputs } from "~/utils/api";
 import { formatCurrency } from "~/utils/currency";
+import { toNumber } from "~/utils/prisma";
 import { Character } from "~/utils/text";
 import { CostPerUnitRenderer } from "./cost-per-unit-renderer";
 import { NameRenderer } from "./name-renderer";
@@ -66,9 +67,9 @@ export function RecipesTable() {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
         }
-        return `${formatCurrency(
-          new Prisma.Decimal(params.value).toNumber()
-        )} /${params.data.batchSizeUnit.abbrevSingular}`;
+        return `${formatCurrency(toNumber(params.value)!)} /${
+          params.data.batchSizeUnit.abbrevSingular
+        }`;
       },
     },
     {
@@ -84,9 +85,9 @@ export function RecipesTable() {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
         }
-        return `${formatCurrency(
-          new Prisma.Decimal(params.value).toNumber()
-        )} /${params.data.batchSizeUnit.abbrevSingular}`;
+        return `${formatCurrency(toNumber(params.value)!)} /${
+          params.data.batchSizeUnit.abbrevSingular
+        }`;
       },
     },
   ];

@@ -1,9 +1,9 @@
-import { Prisma } from "@prisma/client";
 import {
   createRecipeFormSchema,
   deleteRecipeSchema,
 } from "~/features/recipes/types";
 import { db } from "~/server/db";
+import { toDecimal } from "~/utils/prisma";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const recipeRouter = createTRPCRouter({
@@ -15,11 +15,11 @@ export const recipeRouter = createTRPCRouter({
         input: { materials, batchSizeUnit, categories, ...rest },
       }) => {
         const totalCost = materials.reduce((acc, recipeMaterial) => {
-          const quantity = new Prisma.Decimal(recipeMaterial.quantity);
+          const quantity = toDecimal(recipeMaterial.quantity);
           const costPerUnit = recipeMaterial.material.value.cost ?? 0;
           const totalMaterialCost = quantity.times(costPerUnit);
           return acc.plus(totalMaterialCost);
-        }, new Prisma.Decimal(0));
+        }, toDecimal(0));
 
         const costPerUnit = totalCost.div(rest.batchSize);
         return db.recipe.create({

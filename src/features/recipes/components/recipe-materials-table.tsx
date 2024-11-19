@@ -1,10 +1,9 @@
-import { Prisma } from "@prisma/client";
-
 import { type ColDef } from "node_modules/ag-grid-community/dist/types/core/main";
 
 import { Table } from "~/components/table";
 import { formatCurrency } from "~/utils/currency";
 import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import { toNumber } from "~/utils/prisma";
 import { Character } from "~/utils/text";
 import { type RecipesTableRows } from "./recipes-table";
 
@@ -27,15 +26,10 @@ export function RecipeMaterialsTable({
       quantityUnit,
     }),
     batchCost: material.cost
-      ? formatCurrency(
-          new Prisma.Decimal(quantity)
-            .times(new Prisma.Decimal(material.cost))
-            .toNumber(),
-          {
-            minimumFractionDigits: 4,
-            maximumFractionDigits: 4,
-          }
-        )
+      ? formatCurrency(toNumber(quantity.times(material.cost))!, {
+          minimumFractionDigits: 4,
+          maximumFractionDigits: 4,
+        })
       : Character.EM_DASH,
     unitQuantity: formatQuantityWithUnitAbbrev({
       quantity: quantity.div(batchSize),

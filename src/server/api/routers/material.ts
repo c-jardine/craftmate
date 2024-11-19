@@ -14,6 +14,7 @@ import {
   updateMaterialQuantityFormSchema,
   updateVendorsFormSchema,
 } from "~/types/material";
+import { toDecimal } from "~/utils/prisma";
 
 export const materialRouter = createTRPCRouter({
   create: protectedProcedure
@@ -264,8 +265,8 @@ export const materialRouter = createTRPCRouter({
         ctx,
         input: { materialId, type, originalQuantity, adjustedQuantity, notes },
       }) => {
-        const prevQuantity = new Prisma.Decimal(originalQuantity);
-        const adjustQuantity = new Prisma.Decimal(adjustedQuantity);
+        const prevQuantity = toDecimal(originalQuantity);
+        const adjustQuantity = toDecimal(adjustedQuantity);
 
         function getNewQuantity() {
           switch (type.value.action) {
