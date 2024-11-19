@@ -1,4 +1,4 @@
-import { Flex, HStack, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Flex, HStack, SimpleGrid, Stack, Tag, Text } from "@chakra-ui/react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
@@ -61,7 +61,14 @@ export function RecipesCards() {
                 ({recipe.materials.length} materials)
               </Text>
             </HStack>
-            <SimpleGrid columns={4}>
+            {recipe.categories?.length > 0 && (
+              <HStack wrap="wrap">
+                {recipe.categories.map((category) => (
+                  <Tag key={category.id}>{category.name}</Tag>
+                ))}
+              </HStack>
+            )}
+            <SimpleGrid columns={4} gap={4}>
               <Detail
                 title="Unit cost"
                 details={`${formatCurrency(toNumber(recipe.costPerUnit)!)} /${
