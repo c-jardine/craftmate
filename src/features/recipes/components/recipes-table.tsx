@@ -1,14 +1,14 @@
-import { Flex, useToast } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import { Prisma } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 import {
-  ValueFormatterParams,
   type ColDef,
+  type ValueFormatterParams,
 } from "node_modules/ag-grid-community/dist/types/core/main";
 
-import { Prisma } from "@prisma/client";
 import PuffLoader from "react-spinners/PuffLoader";
 import { Table } from "~/components/table";
 import { api, type RouterOutputs } from "~/utils/api";
@@ -26,10 +26,6 @@ export type RecipesTableRows = RouterOutputs["recipe"]["getAll"][0];
 export function RecipesTable() {
   // Fetch materials query
   const { data: recipes, isLoading } = api.recipe.getAll.useQuery();
-
-  const toast = useToast();
-
-  const utils = api.useUtils();
 
   const [rowData, setRowData] = useState<RecipesTableRows[]>([]);
 
@@ -118,7 +114,7 @@ export function RecipesTable() {
       columnDefs={colDefs}
       autoSizeStrategy={{
         type: "fitCellContents",
-        colIds: ["id", "retailPrice", "wholesalePrice"],
+        colIds: ["id", "costPerUnit", "retailPrice", "wholesalePrice"],
       }}
       // onDelete={onDelete}
     />

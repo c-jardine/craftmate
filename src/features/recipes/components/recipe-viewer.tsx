@@ -16,20 +16,20 @@ import {
   MenuList,
   SimpleGrid,
   Stack,
-  StackDivider,
   Tag,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Prisma } from "@prisma/client";
 import { FaEllipsis } from "react-icons/fa6";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { Detail } from "~/components/detail";
 import { formatCurrency } from "~/utils/currency";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import { toNumber } from "~/utils/prisma";
 import { Character } from "~/utils/text";
 import { DeleteRecipeButton } from "./delete-recipe-button";
+import { RecipeMaterialsAccordion } from "./recipe-materials-accordion";
+import { RecipeMaterialsTable } from "./recipe-materials-table";
 import { type RecipesTableRows } from "./recipes-table";
 
 export function RecipeViewer(
@@ -48,16 +48,23 @@ export function RecipeViewer(
     retailPrice,
     wholesalePrice,
     costPerUnit,
-    batchSize,
     batchSizeUnit,
     materials,
     categories,
   } = props;
 
+  // Calculate the margin.
   const margin = retailPrice
+    ? retailPrice.minus(costPerUnit).div(retailPrice)
+    : undefined;
+
+  // Format the margin for display.
+  const marginFormatted = margin
     ? Intl.NumberFormat("en-US", {
         style: "percent",
-      }).format(retailPrice.minus(costPerUnit).div(retailPrice).toNumber())
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(margin.toNumber())
     : Character.EM_DASH;
 
   return (
@@ -77,7 +84,7 @@ export function RecipeViewer(
       >
         {name}
       </Button>
-      <Drawer {...{ isOpen, onClose }} size="md">
+      <Drawer {...{ isOpen, onClose }} size="xl">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader as={Stack}>
@@ -93,7 +100,7 @@ export function RecipeViewer(
             )}
           </DrawerHeader>
           <DrawerBody>
-            <Stack spacing={4}>
+            <Stack spacing={4} h="full">
               <HStack>
                 {/* <UpdateMaterialForm {...props} /> */}
                 <Menu>
@@ -108,94 +115,43 @@ export function RecipeViewer(
                 </Menu>
               </HStack>
 
-              <SimpleGrid columns={3} gap={4}>
-                <Detail
-                  title="Cost per unit"
-                  details={`${formatCurrency(
-                    new Prisma.Decimal(costPerUnit).toNumber()
-                  )} /${batchSizeUnit.abbrevSingular}`}
-                />
+              <SimpleGrid columns={4} gap={4}>
                 <Detail
                   title="MSRP"
                   details={
                     retailPrice
-                      ? formatCurrency(
-                          new Prisma.Decimal(retailPrice).toNumber()
-                        )
+                      ? formatCurrency(toNumber(retailPrice)!)
                       : Character.EM_DASH
                   }
                 />
                 <Detail
-                  title="Wholesale price"
+                  title="Wholesale"
                   details={
                     wholesalePrice
-                      ? formatCurrency(
-                          new Prisma.Decimal(wholesalePrice).toNumber()
-                        )
+                      ? formatCurrency(toNumber(wholesalePrice)!)
                       : Character.EM_DASH
                   }
                 />
+                <Detail
+                  title="Cost per unit"
+                  details={`${formatCurrency(toNumber(costPerUnit)!)} /${
+                    batchSizeUnit.abbrevSingular
+                  }`}
+                />
+                <Detail title="Margin" details={marginFormatted} />
                 <Detail title="SKU" details={sku ?? Character.EM_DASH} />
                 <Detail title="UPC" details={upc ?? Character.EM_DASH} />
-                <Detail title="Margin" details={margin} />
               </SimpleGrid>
 
               {materials.length > 0 && (
                 <>
                   <Heading as="h2" fontSize="lg">
-                    Materials
+                    Materials used
                   </Heading>
-                  <Stack spacing={4} divider={<StackDivider />}>
-                    {materials.map(
-                      ({ id, quantity, quantityUnit, material }) => {
-                        return (
-                          <Stack key={id}>
-                            <Heading
-                              as="h3"
-                              fontSize="sm"
-                              fontWeight="semibold"
-                            >
-                              {material.name}
-                            </Heading>
-                            <SimpleGrid columns={3} fontSize="sm">
-                              <Detail
-                                title="Quantity per batch"
-                                details={formatQuantityWithUnitAbbrev({
-                                  quantity,
-                                  quantityUnit,
-                                })}
-                              />
-                              <Detail
-                                title="Price per unit"
-                                details={
-                                  material.cost
-                                    ? formatCurrency(
-                                        quantity
-                                          .div(batchSize)
-                                          .times(material.cost)
-                                          .toNumber()
-                                      )
-                                    : Character.EM_DASH
-                                }
-                              />
-
-                              <Detail
-                                title="Price per batch"
-                                details={
-                                  material.cost &&
-                                  formatCurrency(
-                                    new Prisma.Decimal(quantity)
-                                      .times(new Prisma.Decimal(material.cost))
-                                      .toNumber()
-                                  )
-                                }
-                              />
-                            </SimpleGrid>
-                          </Stack>
-                        );
-                      }
-                    )}
-                  </Stack>
+                  <>
+                    <RecipeMaterialsTable {...props} />
+                    <RecipeMaterialsAccordion {...props} />
+                  </>
                 </>
               )}
             </Stack>
