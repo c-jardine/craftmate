@@ -10,6 +10,7 @@ import { theme } from "~/styles/chakra/theme";
 import { toastOptions } from "~/styles/chakra/toast";
 import { api } from "~/utils/api";
 import "../styles/globals.css";
+import Head from "next/head";
 
 // Automatically deserialize Prisma responses with Prisma.Decimal.
 superjson.registerCustom<Prisma.Decimal, string>(
@@ -28,6 +29,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <ChakraProvider theme={theme} toastOptions={toastOptions}>
+        <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1"
+          />
+        </Head>
         <RootLayout>
           <Component {...pageProps} />
         </RootLayout>
