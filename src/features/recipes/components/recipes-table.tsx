@@ -19,9 +19,6 @@ import { NameRenderer } from "./name-renderer";
 
 // Table column type definition
 export type RecipesTableRows = RouterOutputs["recipe"]["getAll"][0];
-// & {
-//   status: string;
-// };
 
 export function RecipesTable() {
   // Fetch materials query
@@ -35,7 +32,6 @@ export function RecipesTable() {
       setRowData(
         recipes.map((recipe) => ({
           ...recipe,
-          //   status: "Format status",
         }))
       );
     }
@@ -114,7 +110,7 @@ export function RecipesTable() {
       columnDefs={colDefs}
       autoSizeStrategy={{
         type: "fitCellContents",
-        colIds: ["id", "costPerUnit", "retailPrice", "wholesalePrice"],
+        colIds: ["name", "costPerUnit", "retailPrice", "wholesalePrice"],
       }}
       // onDelete={onDelete}
     />

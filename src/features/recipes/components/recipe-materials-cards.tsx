@@ -30,7 +30,7 @@ export function RecipeMaterialsCards({
               {material.name}
             </Heading>
             <HStack divider={<Icon as={FaCircle} boxSize={1} />}>
-              <Text fontSize="sm">
+              <Text fontSize="sm" color="zinc.600">
                 {formatQuantityWithUnitAbbrev({
                   quantity: quantity.div(batchSize),
                   quantityUnit,
@@ -38,7 +38,7 @@ export function RecipeMaterialsCards({
                 used
               </Text>
 
-              <Text fontSize="sm">
+              <Text fontSize="sm" color="zinc.600">
                 {material.cost
                   ? `${formatCurrency(
                       quantity.div(batchSize).times(material.cost).toNumber(),
@@ -50,7 +50,7 @@ export function RecipeMaterialsCards({
                   : Character.EM_DASH}
               </Text>
 
-              <Text fontSize="sm">
+              <Text fontSize="sm" color="zinc.600">
                 {formatQuantityWithUnitAbbrev({
                   quantity: material.quantity,
                   quantityUnit,

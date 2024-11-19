@@ -85,7 +85,7 @@ export function RecipeViewer(
       >
         {name}
       </Button>
-      <Drawer {...{ isOpen, onClose }} size="xl">
+      <Drawer {...{ isOpen, onClose }} size="lg">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader as={Stack}>
