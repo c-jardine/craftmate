@@ -58,7 +58,7 @@ export function RecipesTable() {
     },
     {
       headerName: "Cost per unit",
-      field: "id", // TODO: wrong field
+      field: "costPerUnit",
       cellRenderer: CostPerUnitRenderer,
     },
     {

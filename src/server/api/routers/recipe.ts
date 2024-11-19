@@ -72,6 +72,7 @@ export const recipeRouter = createTRPCRouter({
         materials: {
           include: {
             material: true,
+            quantityUnit: true,
           },
         },
         batchSizeUnit: true,
