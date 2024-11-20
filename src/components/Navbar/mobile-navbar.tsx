@@ -84,7 +84,6 @@ export function MobileNavbar() {
           h="calc(100% - 4rem - 1px)"
           top="calc(4rem - 1px) !important"
         >
-          {/* <DrawerHeader>Menu</DrawerHeader> */}
           <DrawerBody>
             {/* Session nav links */}
             {session && (
