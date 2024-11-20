@@ -130,7 +130,9 @@ export function QuantityEditor(
 
           <ModalFooter gap={4}>
             <ScaleFade in={!isSubmitting} initialScale={0.9}>
-              <Button size="sm">Cancel</Button>
+              <Button size="sm" onClick={onClose}>
+                Cancel
+              </Button>
             </ScaleFade>
             <Button
               type="submit"
