@@ -29,6 +29,31 @@ const menuLink = defineStyle({
   },
 });
 
+const menuLinkActive = defineStyle({
+  px: 4,
+  py: 2,
+  w: "full",
+  justifyContent: "flex-start",
+  rounded: "none",
+  color: "zinc.600",
+  textDecoration: "none !important",
+  fontSize: "sm",
+  fontWeight: "normal",
+  transition: "200ms ease-in-out",
+  bg: "blue.100",
+  _hover: {
+    bg: "blue.200",
+  },
+
+  _dark: {
+    color: "zinc.300",
+    bg: "blue.950",
+    _hover: {
+      bg: "blue.800",
+    },
+  },
+});
+
 const navbarLink = defineStyle({
   px: 4,
   py: 2,
@@ -63,5 +88,5 @@ const navbarLinkActive = defineStyle({
 
 export const linkTheme = defineStyleConfig({
   baseStyle,
-  variants: { menuLink, navbarLink, navbarLinkActive },
+  variants: { menuLink, menuLinkActive, navbarLink, navbarLinkActive },
 });

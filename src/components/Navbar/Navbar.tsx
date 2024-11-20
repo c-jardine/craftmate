@@ -1,13 +1,14 @@
-import { Container, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 
 import { DesktopNavbar } from "./desktop-navbar";
+import { MobileNavbar } from "./mobile-navbar";
 
 export function Navbar() {
   const bgColor = useColorModeValue("white", "zinc.900");
   const borderColor = useColorModeValue("zinc.200", "zinc.800");
 
   return (
-    <Flex
+    <Box
       position="fixed"
       top={0}
       w="full"
@@ -15,11 +16,10 @@ export function Navbar() {
       bg={bgColor}
       borderBottom="1px solid"
       borderBottomColor={borderColor}
-      alignItems="center"
+      px={4}
     >
-      <Container px={4} maxW="1440px">
-        <DesktopNavbar />
-      </Container>
-    </Flex>
+      <DesktopNavbar />
+      <MobileNavbar />
+    </Box>
   );
 }

@@ -1,19 +1,16 @@
 import { Flex, HStack, SimpleGrid, Stack, Tag, Text } from "@chakra-ui/react";
+import PuffLoader from "react-spinners/PuffLoader";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 
-import PuffLoader from "react-spinners/PuffLoader";
 import { Detail } from "~/components/detail";
 import { PageSection } from "~/components/page-section";
-import { api, type RouterOutputs } from "~/utils/api";
+import { api } from "~/utils/api";
 import { formatCurrency } from "~/utils/currency";
 import { toNumber } from "~/utils/prisma";
 import { Character } from "~/utils/text";
 import { RecipeViewer } from "./recipe-viewer";
-
-// Table column type definition
-export type RecipesTableRows = RouterOutputs["recipe"]["getAll"][0];
 
 export function RecipesCards() {
   // Fetch materials query
@@ -68,12 +65,26 @@ export function RecipesCards() {
                 ))}
               </HStack>
             )}
-            <SimpleGrid columns={4} gap={4}>
+            <SimpleGrid columns={3} gap={4}>
+              <Detail
+                title="SKU"
+                details={recipe.sku ?? Character.EM_DASH}
+                fontSize="sm"
+              />
+
+              <Detail
+                title="UPC"
+                details={recipe.upc ?? Character.EM_DASH}
+                fontSize="sm"
+              />
+
               <Detail
                 title="Unit cost"
                 details={`${formatCurrency(toNumber(recipe.costPerUnit)!)} /${
                   recipe.batchSizeUnit.abbrevSingular
                 }`}
+                alignItems="flex-end"
+                fontSize="sm"
               />
 
               <Detail
@@ -81,6 +92,7 @@ export function RecipesCards() {
                 details={`${formatCurrency(toNumber(recipe.retailPrice)!)} /${
                   recipe.batchSizeUnit.abbrevSingular
                 }`}
+                fontSize="sm"
               />
 
               <Detail
@@ -88,9 +100,15 @@ export function RecipesCards() {
                 details={`${formatCurrency(
                   toNumber(recipe.wholesalePrice)!
                 )} /${recipe.batchSizeUnit.abbrevSingular}`}
+                fontSize="sm"
               />
 
-              <Detail title="Margin" details={marginFormatted} />
+              <Detail
+                title="Margin"
+                details={marginFormatted}
+                alignItems="flex-end"
+                fontSize="sm"
+              />
             </SimpleGrid>
           </PageSection>
         );

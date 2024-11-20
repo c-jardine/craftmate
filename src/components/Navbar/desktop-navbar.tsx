@@ -20,7 +20,14 @@ export function DesktopNavbar() {
   ];
 
   return (
-    <SimpleGrid gridTemplateColumns="1fr auto 1fr" alignItems="center" overflowX="scroll">
+    <SimpleGrid
+      display={{ base: "none", md: "grid" }}
+      gridTemplateColumns="1fr auto 1fr"
+      alignItems="center"
+      overflowX="scroll"
+      w="full"
+      h="full"
+    >
       {/* Brand */}
       <Box>
         <Link as={NextLink} href="/" fontWeight="bold">
