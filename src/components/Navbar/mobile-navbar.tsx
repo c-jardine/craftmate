@@ -86,44 +86,42 @@ export function MobileNavbar() {
         >
           {/* <DrawerHeader>Menu</DrawerHeader> */}
           <DrawerBody>
-            <Stack>
-              {/* Session nav links */}
-              {session && (
-                <Stack>
-                  {navLinks.map(({ href, label }) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      variant={(() => {
-                        if (href === "/") {
-                          if (router.asPath === "/") {
-                            return "menuLinkActive";
-                          }
-                          return "menuLink";
+            {/* Session nav links */}
+            {session && (
+              <Stack spacing={0}>
+                {navLinks.map(({ href, label }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    variant={(() => {
+                      if (href === "/") {
+                        if (router.asPath === "/") {
+                          return "menuLinkActive";
                         }
-                        return isActiveLink(router, href)
-                          ? "menuLinkActive"
-                          : "menuLink";
-                      })()}
-                    >
-                      {label}
-                    </Link>
-                  ))}
+                        return "menuLink";
+                      }
+                      return isActiveLink(router, href)
+                        ? "menuLinkActive"
+                        : "menuLink";
+                    })()}
+                  >
+                    {label}
+                  </Link>
+                ))}
 
-                  <Divider />
+                <Divider />
 
-                  <Link as={NextLink} href="/settings" variant="menuLink">
-                    Settings
-                  </Link>
-                  <Link as={NextLink} href="/edit-profile" variant="menuLink">
-                    Edit profile
-                  </Link>
-                  <Link as={NextLink} href="/help" variant="menuLink">
-                    Help
-                  </Link>
-                </Stack>
-              )}
-            </Stack>
+                <Link as={NextLink} href="/settings" variant="menuLink">
+                  Settings
+                </Link>
+                <Link as={NextLink} href="/edit-profile" variant="menuLink">
+                  Edit profile
+                </Link>
+                <Link as={NextLink} href="/help" variant="menuLink">
+                  Help
+                </Link>
+              </Stack>
+            )}
           </DrawerBody>
           {session && (
             <DrawerFooter>
