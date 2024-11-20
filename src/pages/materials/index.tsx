@@ -16,6 +16,7 @@ import { PageHeader } from "~/components/page-header";
 import { CreateMaterialForm } from "~/features/materials/components/create-material-form";
 import { ManageCategories } from "~/features/materials/components/manage-categories";
 import { ManageVendors } from "~/features/materials/components/manage-vendors";
+import { MaterialsCards } from "~/features/materials/components/materials-cards";
 import { MaterialsTable } from "~/features/materials/components/materials-table";
 import { withAuth } from "~/server/auth";
 
@@ -46,7 +47,10 @@ export default function Materials() {
           <CreateMaterialForm />
         </PageHeader.Content>
       </PageHeader>
-      <MaterialsTable />
+      <>
+        <MaterialsTable />
+        <MaterialsCards />
+      </>
     </Stack>
   );
 }

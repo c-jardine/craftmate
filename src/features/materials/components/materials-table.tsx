@@ -177,6 +177,9 @@ export function MaterialsTable() {
         colIds: ["status", "quantity", "minQuantity", "cost", "vendor"],
       }}
       onDelete={onDelete}
+      containerProps={{
+        display: { base: "none", md: "block" },
+      }}
     />
   );
 }

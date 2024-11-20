@@ -3,17 +3,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { type CustomCellRendererProps } from "ag-grid-react";
-
 import {
   updateMaterialQuantityFormSchema,
   type UpdateMaterialQuantityFormType,
 } from "~/types/material";
-import { api } from "~/utils/api";
-import { type MaterialsTableRows } from "../components/materials-table";
+import { api, RouterOutputs } from "~/utils/api";
 
 export function useUpdateQuantity(
-  node: CustomCellRendererProps<MaterialsTableRows>["node"]
+  props: RouterOutputs["material"]["getAll"][0]
 ) {
   const toast = useToast();
   const utils = api.useUtils();
@@ -39,8 +36,8 @@ export function useUpdateQuantity(
 
   const form = useForm<UpdateMaterialQuantityFormType>({
     defaultValues: {
-      materialId: node.data?.id ?? undefined,
-      originalQuantity: node.data?.quantity?.toString() ?? "0",
+      materialId: props.id ?? undefined,
+      originalQuantity: props.quantity?.toString() ?? "0",
     },
     resolver: zodResolver(updateMaterialQuantityFormSchema),
   });
@@ -54,7 +51,7 @@ export function useUpdateQuantity(
 
   // Initialize form callback
   const initializeForm = useCallback(
-    (data: MaterialsTableRows) => {
+    (data: RouterOutputs["material"]["getAll"][0]) => {
       reset({
         materialId: data.id,
         originalQuantity: data.quantity?.toString() ?? "0",
@@ -64,10 +61,10 @@ export function useUpdateQuantity(
   );
 
   useEffect(() => {
-    if (node.data) {
-      initializeForm(node.data);
+    if (props) {
+      initializeForm(props);
     }
-  }, [node.data, initializeForm]);
+  }, [props, initializeForm]);
 
   return { form, onSubmit, updateTypeOptions };
 }
