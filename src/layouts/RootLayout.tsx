@@ -1,7 +1,6 @@
 import { Box, Container } from "@chakra-ui/react";
 import { type ReactNode } from "react";
-
-import { Navbar } from "~/components/navbar";
+import { Navbar } from "~/components/navbar/Navbar";
 
 interface RootLayoutProps {
   children: ReactNode;

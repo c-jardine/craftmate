@@ -25,6 +25,7 @@ export function DesktopSignOut() {
       <Button
         leftIcon={<Icon as={FaSignOutAlt} />}
         variant="menuButton"
+        w={{ base: "fit-content", md: "full" }}
         onClick={onOpen}
       >
         Sign out
