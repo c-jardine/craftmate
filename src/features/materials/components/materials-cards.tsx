@@ -33,7 +33,7 @@ export function MaterialsCards() {
   }
 
   return (
-    <Stack spacing={8}>
+    <Stack spacing={4}>
       {materials.map((material) => {
         return (
           <PageSection
