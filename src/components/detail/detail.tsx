@@ -3,7 +3,7 @@ import {
   Stack,
   type StackProps,
   Text,
-  TypographyProps,
+  type TypographyProps,
 } from "@chakra-ui/react";
 import { type ReactNode } from "react";
 

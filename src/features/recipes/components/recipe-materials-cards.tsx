@@ -8,9 +8,11 @@ import {
 } from "@chakra-ui/react";
 
 import { FaCircle } from "react-icons/fa6";
-import { formatCurrency } from "~/utils/currency";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
-import { Character } from "~/utils/text";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
 import { type RecipesTableRows } from "./recipes-table";
 
 export function RecipeMaterialsCards({

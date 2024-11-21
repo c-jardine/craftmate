@@ -1,6 +1,6 @@
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { Character } from "~/utils/text";
+import { Character } from "~/utils/formatting";
 import { type MaterialsTableRows } from "./materials-table";
 import { StatusIndicator } from "./status-indicator";
 

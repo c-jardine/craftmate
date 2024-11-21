@@ -13,10 +13,9 @@ import {
 import PuffLoader from "react-spinners/PuffLoader";
 import { Table } from "~/components/table";
 import { api, type RouterOutputs } from "~/utils/api";
-import { formatCurrency } from "~/utils/currency";
+import { Character, formatCurrency } from "~/utils/formatting";
 import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
 import { CostPerUnitRenderer } from "./cost-per-unit-renderer";
 import { NameRenderer } from "./name-renderer";
 

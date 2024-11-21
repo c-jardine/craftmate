@@ -2,7 +2,7 @@ import { HStack, Text } from "@chakra-ui/react";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { formatCurrency } from "~/utils/currency";
+import { formatCurrency } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
 import { type RecipesTableRows } from "./recipes-table";
 
@@ -23,7 +23,7 @@ export function CostPerUnitRenderer({
       wrap="wrap"
     >
       <Text>
-        {formatCurrency(toNumber(costPerUnit)!)} /{batchSizeUnit.abbrevSingular}
+        {formatCurrency(toNumber(costPerUnit))} /{batchSizeUnit.abbrevSingular}
       </Text>
     </HStack>
   );

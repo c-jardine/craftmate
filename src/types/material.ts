@@ -1,7 +1,7 @@
 import { MaterialQuantityUpdateAction } from "@prisma/client";
 import { z } from "zod";
 
-import { CustomZod } from "~/utils/zod";
+import { CustomZod } from "~/utils/form";
 
 export const createMaterialFormSchema = z.object({
   name: z.string().min(1, "Required"),

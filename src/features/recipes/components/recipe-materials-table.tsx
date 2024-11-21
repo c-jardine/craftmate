@@ -4,10 +4,12 @@ import {
 } from "node_modules/ag-grid-community/dist/types/core/main";
 
 import { Table } from "~/components/table";
-import { formatCurrency } from "~/utils/currency";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
 import { type RecipesTableRows } from "./recipes-table";
 
 export function RecipeMaterialsTable({

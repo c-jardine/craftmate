@@ -7,7 +7,7 @@ import {
   updateMaterialQuantityFormSchema,
   type UpdateMaterialQuantityFormType,
 } from "~/types/material";
-import { api, RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 
 export function useUpdateQuantity(
   props: RouterOutputs["material"]["getAll"][0]

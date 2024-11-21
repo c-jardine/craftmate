@@ -13,8 +13,7 @@ import {
 
 import { Table } from "~/components/table";
 import { api, type RouterOutputs } from "~/utils/api";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
-import { Character } from "~/utils/text";
+import { Character, formatQuantityWithUnitAbbrev } from "~/utils/formatting";
 import { NameRenderer } from "./name-renderer";
 import { QuantityRenderer } from "./quantity-renderer";
 import { StatusRenderer } from "./status-renderer";

@@ -1,6 +1,6 @@
 import type { Material, QuantityUnit } from "@prisma/client";
 import { z } from "zod";
-import { CustomZod } from "~/utils/zod";
+import { CustomZod } from "~/utils/form";
 
 export const createRecipeFormSchema = z.object({
   name: z.string().min(1, "Required"),

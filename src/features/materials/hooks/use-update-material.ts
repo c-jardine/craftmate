@@ -10,7 +10,7 @@ import {
   type UpdateMaterialFormType,
 } from "~/types/material";
 import { api } from "~/utils/api";
-import { mapToSelectInput } from "~/utils/selectInput";
+import { mapToSelectInput } from "~/utils/form";
 import { isTRPCClientError } from "~/utils/trpc";
 import { type MaterialsTableRows } from "../components/materials-table";
 

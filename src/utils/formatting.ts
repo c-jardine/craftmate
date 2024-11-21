@@ -1,5 +1,23 @@
-import { type QuantityUnit, Prisma } from "@prisma/client";
-import { Character } from "./text";
+import { type Prisma, type QuantityUnit } from "@prisma/client";
+
+export const Character = {
+  EM_DASH: "—",
+};
+
+export function removeCommas(value: string) {
+  return value.replace(/,/g, "");
+}
+
+export function formatCurrency(
+  amount: number,
+  options?: Intl.NumberFormatOptions
+) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    ...options,
+  }).format(amount);
+}
 
 interface FormatQuantityWithUnitOptions {
   /** The quantity, used to determine if the unit should be singular or plural. */

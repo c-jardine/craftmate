@@ -2,13 +2,13 @@ import {
   Tag,
   TagLabel,
   TagLeftIcon,
-  TagProps,
+  type TagProps,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FaCircle } from "react-icons/fa6";
-import { QuantityStatus } from "~/types/status";
-import { RouterOutputs } from "~/utils/api";
-import { getStockStatus } from "~/utils/stockStatus";
+import { type QuantityStatus } from "~/types/status";
+import { type RouterOutputs } from "~/utils/api";
+import { getStockStatus } from "~/utils/inventory";
 
 export function StatusIndicator(props: RouterOutputs["material"]["getAll"][0]) {
   const greenStyles = {

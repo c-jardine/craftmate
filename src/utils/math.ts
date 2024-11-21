@@ -1,5 +1,5 @@
 import { type Prisma } from "@prisma/client";
-import { Character } from "./text";
+import { Character } from "./formatting";
 
 export function calculateMargin({
   revenue,

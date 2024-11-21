@@ -7,10 +7,12 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied
 import { Detail } from "~/components/detail";
 import { PageSection } from "~/components/page-section";
 import { api } from "~/utils/api";
-import { formatCurrency } from "~/utils/currency";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
 import { MaterialViewer } from "./material-viewer";
 import { QuantityEditor } from "./quantity-editor";
 import { StatusIndicator } from "./status-indicator";
@@ -80,9 +82,13 @@ export function MaterialsCards() {
 
               <Detail
                 title="Cost"
-                details={`${formatCurrency(toNumber(material.cost)!)} /${
-                  material.quantityUnit.abbrevSingular
-                }`}
+                details={
+                  material.cost
+                    ? `${formatCurrency(toNumber(material.cost))} /${
+                        material.quantityUnit.abbrevSingular
+                      }`
+                    : Character.EM_DASH
+                }
                 fontSize="sm"
               />
 

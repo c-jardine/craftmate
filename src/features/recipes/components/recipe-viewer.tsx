@@ -24,11 +24,13 @@ import { FaEllipsis } from "react-icons/fa6";
 import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { Detail } from "~/components/detail";
-import { formatCurrency } from "~/utils/currency";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
 import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
 import { DeleteRecipeButton } from "./delete-recipe-button";
 import { RecipeMaterialsCards } from "./recipe-materials-cards";
 import { RecipeMaterialsTable } from "./recipe-materials-table";

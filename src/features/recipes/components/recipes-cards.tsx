@@ -7,9 +7,8 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied
 import { Detail } from "~/components/detail";
 import { PageSection } from "~/components/page-section";
 import { api } from "~/utils/api";
-import { formatCurrency } from "~/utils/currency";
+import { Character, formatCurrency } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
 import { RecipeViewer } from "./recipe-viewer";
 
 export function RecipesCards() {
@@ -80,7 +79,7 @@ export function RecipesCards() {
 
               <Detail
                 title="Unit cost"
-                details={`${formatCurrency(toNumber(recipe.costPerUnit)!)} /${
+                details={`${formatCurrency(toNumber(recipe.costPerUnit))} /${
                   recipe.batchSizeUnit.abbrevSingular
                 }`}
                 alignItems="flex-end"
@@ -89,17 +88,25 @@ export function RecipesCards() {
 
               <Detail
                 title="MSRP"
-                details={`${formatCurrency(toNumber(recipe.retailPrice)!)} /${
-                  recipe.batchSizeUnit.abbrevSingular
-                }`}
+                details={
+                  recipe.retailPrice
+                    ? `${formatCurrency(toNumber(recipe.retailPrice))} /${
+                        recipe.batchSizeUnit.abbrevSingular
+                      }`
+                    : Character.EM_DASH
+                }
                 fontSize="sm"
               />
 
               <Detail
                 title="Wholesale"
-                details={`${formatCurrency(
-                  toNumber(recipe.wholesalePrice)!
-                )} /${recipe.batchSizeUnit.abbrevSingular}`}
+                details={
+                  recipe.wholesalePrice
+                    ? `${formatCurrency(toNumber(recipe.wholesalePrice))} /${
+                        recipe.batchSizeUnit.abbrevSingular
+                      }`
+                    : Character.EM_DASH
+                }
                 fontSize="sm"
               />
 

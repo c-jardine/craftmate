@@ -3,8 +3,7 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa6";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
-import { Character } from "~/utils/text";
+import { Character, formatQuantityWithUnitAbbrev } from "~/utils/formatting";
 import { type MaterialLogsTableRows } from "./material-logs-table";
 
 export function AdjustedQuantityRenderer({
