@@ -1,11 +1,12 @@
 import { Flex } from "@chakra-ui/react";
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 import {
   type ColDef,
+  type ColGroupDef,
   type ValueFormatterParams,
 } from "node_modules/ag-grid-community/dist/types/core/main";
 
@@ -39,92 +40,103 @@ export function RecipesTable() {
     }
   }, [recipes]);
 
-  const colDefs: ColDef<RecipesTableRows>[] = [
-    {
-      headerName: "Name",
-      field: "name",
-      filter: true,
-      autoHeight: true,
-      flex: 1,
-      minWidth: 250,
-      headerCheckboxSelection: true,
-      checkboxSelection: true,
-      cellRenderer: NameRenderer,
-    },
-    {
-      headerName: "Cost per unit",
-      field: "costPerUnit",
-      cellRenderer: CostPerUnitRenderer,
-    },
-    {
-      headerName: "MSRP",
-      field: "retailPrice",
-      cellStyle: {
-        display: "flex",
-        alignItems: "center",
+  const colDefs: (ColDef<RecipesTableRows> | ColGroupDef<RecipesTableRows>)[] =
+    [
+      {
+        headerName: "Name",
+        field: "name",
+        filter: true,
+        autoHeight: true,
+        flex: 1,
+        minWidth: 250,
+        headerCheckboxSelection: true,
+        checkboxSelection: true,
+        cellRenderer: NameRenderer,
       },
-      valueFormatter: (
-        params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
-      ) => {
-        if (!params.value || !params.data) {
-          return Character.EM_DASH;
-        }
-        return `${formatCurrency(toNumber(params.value))} /${
-          params.data.batchSizeUnit.abbrevSingular
-        }`;
+      {
+        headerName: "Cost per unit",
+        field: "costPerUnit",
+        cellRenderer: CostPerUnitRenderer,
       },
-    },
-    {
-      headerName: "Retail Margin",
-      field: "retailMargin",
-      cellStyle: {
-        display: "flex",
-        alignItems: "center",
+      {
+        headerName: "MSRP",
+        children: [
+          {
+            headerName: "Price",
+            field: "retailPrice",
+            cellStyle: {
+              display: "flex",
+              alignItems: "center",
+            },
+            valueFormatter: (
+              params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+            ) => {
+              if (!params.value || !params.data) {
+                return Character.EM_DASH;
+              }
+              return `${formatCurrency(toNumber(params.value))} /${
+                params.data.batchSizeUnit.abbrevSingular
+              }`;
+            },
+          },
+          {
+            headerName: "Margin",
+            field: "retailMargin",
+            cellStyle: {
+              display: "flex",
+              alignItems: "center",
+            },
+            valueFormatter: (
+              params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+            ) => {
+              if (!params.value || !params.data) {
+                return Character.EM_DASH;
+              }
+              return formatMargin(params.value);
+            },
+          },
+        ],
       },
-      valueFormatter: (
-        params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
-      ) => {
-        if (!params.value || !params.data) {
-          return Character.EM_DASH;
-        }
-        return formatMargin(params.value);
+      {
+        headerName: "Wholesale",
+        children: [
+          {
+            headerName: "Price",
+            field: "wholesalePrice",
+            cellStyle: {
+              display: "flex",
+              alignItems: "center",
+            },
+            valueFormatter: (
+              params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+            ) => {
+              if (!params.value || !params.data) {
+                return Character.EM_DASH;
+              }
+              return `${formatCurrency(toNumber(params.value))} /${
+                params.data.batchSizeUnit.abbrevSingular
+              }`;
+            },
+          },
+          {
+            headerName: "Margin",
+            field: "wholesaleMargin",
+            cellStyle: {
+              display: "flex",
+              alignItems: "center",
+            },
+            valueFormatter: (
+              params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+            ) => {
+              if (!params.value || !params.data) {
+                return Character.EM_DASH;
+              }
+              return formatMargin(params.value);
+            },
+          },
+        ],
       },
-    },
-    {
-      headerName: "Wholesale Price",
-      field: "wholesalePrice",
-      cellStyle: {
-        display: "flex",
-        alignItems: "center",
-      },
-      valueFormatter: (
-        params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
-      ) => {
-        if (!params.value || !params.data) {
-          return Character.EM_DASH;
-        }
-        return `${formatCurrency(toNumber(params.value))} /${
-          params.data.batchSizeUnit.abbrevSingular
-        }`;
-      },
-    },
-    {
-      headerName: "Wholesale Margin",
-      field: "wholesaleMargin",
-      cellStyle: {
-        display: "flex",
-        alignItems: "center",
-      },
-      valueFormatter: (
-        params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
-      ) => {
-        if (!params.value || !params.data) {
-          return Character.EM_DASH;
-        }
-        return formatMargin(params.value);
-      },
-    },
-  ];
+    ];
 
   // Show spinner if query is loading
   if (isLoading) {
