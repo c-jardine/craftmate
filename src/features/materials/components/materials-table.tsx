@@ -13,7 +13,12 @@ import {
 
 import { Table } from "~/components/table";
 import { api, type RouterOutputs } from "~/utils/api";
-import { Character, formatQuantityWithUnitAbbrev } from "~/utils/formatting";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
+import { toNumber } from "~/utils/prisma";
 import { NameRenderer } from "./name-renderer";
 import { QuantityRenderer } from "./quantity-renderer";
 import { StatusRenderer } from "./status-renderer";
@@ -129,7 +134,7 @@ export function MaterialsTable() {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
         }
-        return `$${params.value.toString()} /${
+        return `${formatCurrency(toNumber(params.value))} /${
           params.data.quantityUnit.abbrevSingular
         }`;
       },

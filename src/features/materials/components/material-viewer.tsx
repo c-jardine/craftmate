@@ -25,7 +25,11 @@ import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { Detail } from "~/components/detail";
 import { api } from "~/utils/api";
-import { Character, formatQuantityWithUnitAbbrev } from "~/utils/formatting";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
 import { DeleteMaterialButton } from "./delete-material-button";
 import { MaterialUpdateLogs } from "./material-update-logs";
@@ -117,7 +121,9 @@ export function MaterialViewer(
                   title="Unit cost"
                   details={
                     cost
-                      ? `$${toNumber(cost)} /${quantityUnit.abbrevSingular}`
+                      ? `${formatCurrency(toNumber(cost))} /${
+                          quantityUnit.abbrevSingular
+                        }`
                       : Character.EM_DASH
                   }
                 />
