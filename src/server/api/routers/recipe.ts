@@ -3,6 +3,7 @@ import {
   deleteRecipeSchema,
 } from "~/features/recipes/types";
 import { db } from "~/server/db";
+import { calculateMargin } from "~/utils/math";
 import { toDecimal } from "~/utils/prisma";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -22,10 +23,29 @@ export const recipeRouter = createTRPCRouter({
         }, toDecimal(0));
 
         const costPerUnit = totalCost.div(rest.batchSize);
+
+        const retailMargin =
+          rest.retailPrice && costPerUnit
+            ? calculateMargin({
+                revenue: toDecimal(rest.retailPrice),
+                costOfGoods: costPerUnit,
+              })
+            : null;
+
+        const wholesaleMargin =
+          rest.wholesalePrice && costPerUnit
+            ? calculateMargin({
+                revenue: toDecimal(rest.wholesalePrice),
+                costOfGoods: costPerUnit,
+              })
+            : null;
+
         return db.recipe.create({
           data: {
             ...rest,
             costPerUnit,
+            retailMargin,
+            wholesaleMargin,
             materials: {
               create: materials.map(({ material, quantity }) => {
                 return {

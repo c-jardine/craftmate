@@ -13,6 +13,7 @@ import PuffLoader from "react-spinners/PuffLoader";
 import { Table } from "~/components/table";
 import { api, type RouterOutputs } from "~/utils/api";
 import { formatCurrency } from "~/utils/currency";
+import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
 import { Character } from "~/utils/text";
 import { CostPerUnitRenderer } from "./cost-per-unit-renderer";
@@ -45,6 +46,7 @@ export function RecipesTable() {
       filter: true,
       autoHeight: true,
       flex: 1,
+      minWidth: 250,
       headerCheckboxSelection: true,
       checkboxSelection: true,
       cellRenderer: NameRenderer,
@@ -67,9 +69,25 @@ export function RecipesTable() {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
         }
-        return `${formatCurrency(toNumber(params.value)!)} /${
+        return `${formatCurrency(toNumber(params.value))} /${
           params.data.batchSizeUnit.abbrevSingular
         }`;
+      },
+    },
+    {
+      headerName: "Retail Margin",
+      field: "retailMargin",
+      cellStyle: {
+        display: "flex",
+        alignItems: "center",
+      },
+      valueFormatter: (
+        params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+      ) => {
+        if (!params.value || !params.data) {
+          return Character.EM_DASH;
+        }
+        return formatMargin(params.value);
       },
     },
     {
@@ -85,9 +103,25 @@ export function RecipesTable() {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
         }
-        return `${formatCurrency(toNumber(params.value)!)} /${
+        return `${formatCurrency(toNumber(params.value))} /${
           params.data.batchSizeUnit.abbrevSingular
         }`;
+      },
+    },
+    {
+      headerName: "Wholesale Margin",
+      field: "wholesaleMargin",
+      cellStyle: {
+        display: "flex",
+        alignItems: "center",
+      },
+      valueFormatter: (
+        params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+      ) => {
+        if (!params.value || !params.data) {
+          return Character.EM_DASH;
+        }
+        return formatMargin(params.value);
       },
     },
   ];
@@ -111,7 +145,13 @@ export function RecipesTable() {
       columnDefs={colDefs}
       autoSizeStrategy={{
         type: "fitCellContents",
-        colIds: ["costPerUnit", "retailPrice", "wholesalePrice"],
+        colIds: [
+          "costPerUnit",
+          "retailPrice",
+          "retailMargin",
+          "wholesalePrice",
+          "wholesaleMargin",
+        ],
       }}
       containerProps={{
         display: { base: "none", md: "block" },

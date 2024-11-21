@@ -25,6 +25,8 @@ import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { Detail } from "~/components/detail";
 import { formatCurrency } from "~/utils/currency";
+import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
 import { Character } from "~/utils/text";
 import { DeleteRecipeButton } from "./delete-recipe-button";
@@ -46,7 +48,9 @@ export function RecipeViewer(
     sku,
     upc,
     retailPrice,
+    retailMargin,
     wholesalePrice,
+    wholesaleMargin,
     costPerUnit,
     batchSize,
     batchSizeUnit,
@@ -54,19 +58,8 @@ export function RecipeViewer(
     categories,
   } = props;
 
-  // Calculate the margin.
-  const margin = retailPrice
-    ? retailPrice.minus(costPerUnit).div(retailPrice)
-    : undefined;
-
-  // Format the margin for display.
-  const marginFormatted = margin
-    ? Intl.NumberFormat("en-US", {
-        style: "percent",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(margin.toNumber())
-    : Character.EM_DASH;
+  const retailMarginFormatted = formatMargin(retailMargin);
+  const wholesaleMarginFormatted = formatMargin(wholesaleMargin);
 
   return (
     <>
@@ -116,44 +109,52 @@ export function RecipeViewer(
                 </Menu>
               </HStack>
 
-              <SimpleGrid columns={4} gap={4}>
-                <Detail
-                  title="MSRP"
-                  details={
-                    retailPrice
-                      ? formatCurrency(toNumber(retailPrice)!)
-                      : Character.EM_DASH
-                  }
-                />
-                <Detail
-                  title="Wholesale"
-                  details={
-                    wholesalePrice
-                      ? formatCurrency(toNumber(wholesalePrice)!)
-                      : Character.EM_DASH
-                  }
-                />
+              <SimpleGrid columns={3} gap={4}>
+                <Detail title="SKU" details={sku ?? Character.EM_DASH} />
+
+                <Detail title="UPC" details={upc ?? Character.EM_DASH} />
+
                 <Detail
                   title="Cost per unit"
-                  details={`${formatCurrency(toNumber(costPerUnit)!)} /${
+                  details={`${formatCurrency(toNumber(costPerUnit))} /${
                     batchSizeUnit.abbrevSingular
                   }`}
                 />
-                <Detail title="Margin" details={marginFormatted} />
+
                 <Detail
-                  title="Batch size"
-                  details={toNumber(batchSize) ?? Character.EM_DASH}
+                  title="MSRP"
+                  details={`${
+                    retailPrice
+                      ? formatCurrency(toNumber(retailPrice))
+                      : Character.EM_DASH
+                  } • ${retailMarginFormatted}`}
                 />
-                <Detail title="SKU" details={sku ?? Character.EM_DASH} />
-                <Detail title="UPC" details={upc ?? Character.EM_DASH} />
+
+                <Detail
+                  title="Wholesale"
+                  details={`${
+                    wholesalePrice
+                      ? formatCurrency(toNumber(wholesalePrice))
+                      : Character.EM_DASH
+                  } • ${wholesaleMarginFormatted}`}
+                />
               </SimpleGrid>
 
               {/* Materials list */}
               {materials.length > 0 && (
                 <>
-                  <Heading as="h2" fontSize="lg">
-                    Materials used
-                  </Heading>
+                  <HStack justifyContent="space-between" alignItems="center">
+                    <Heading as="h2" fontSize="lg">
+                      Materials used
+                    </Heading>
+                    <Tag>
+                      Batch size:{" "}
+                      {formatQuantityWithUnitAbbrev({
+                        quantity: batchSize,
+                        quantityUnit: batchSizeUnit,
+                      })}
+                    </Tag>
+                  </HStack>
                   <RecipeMaterialsTable {...props} />
                   <RecipeMaterialsCards {...props} />
                 </>

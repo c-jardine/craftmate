@@ -141,6 +141,8 @@ model Recipe {
     upc             String?
     retailPrice     Decimal?
     wholesalePrice  Decimal?
+    retailMargin    Decimal?
+    wholesaleMargin Decimal?
     materials       RecipeMaterial[]
     batchSize       Decimal
     batchSizeUnit   QuantityUnit     @relation(fields: [batchSizeUnitId], references: [id], onDelete: Cascade, onUpdate: Cascade)
