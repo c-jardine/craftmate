@@ -61,6 +61,7 @@ export function RecipeMaterialsTable({
     },
     {
       headerName: "Per item",
+      marryChildren: true,
       children: [
         {
           headerName: "Quantity",
@@ -74,6 +75,7 @@ export function RecipeMaterialsTable({
     },
     {
       headerName: "Per batch",
+      marryChildren: true,
       children: [
         {
           headerName: "Quantity",

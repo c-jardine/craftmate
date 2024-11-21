@@ -60,6 +60,7 @@ export function RecipesTable() {
       },
       {
         headerName: "MSRP",
+        marryChildren: true,
         children: [
           {
             headerName: "Price",
@@ -99,6 +100,7 @@ export function RecipesTable() {
       },
       {
         headerName: "Wholesale",
+        marryChildren: true,
         children: [
           {
             headerName: "Price",
