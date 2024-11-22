@@ -57,7 +57,7 @@ export function DeleteRecipeButton({ id, name }: { id: string; name: string }) {
             <Button colorScheme="red" onClick={handleDelete}>
               Delete recipe
             </Button>
-            <Button>Cancel</Button>
+            <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

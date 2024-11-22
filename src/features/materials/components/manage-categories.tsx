@@ -70,7 +70,7 @@ export function ManageCategories() {
               ))}
             </Stack>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter gap={4}>
             <Stack w="full">
               <Button
                 leftIcon={<Icon as={FaPlus} />}

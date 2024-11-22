@@ -44,7 +44,7 @@ export function DesktopSignOut() {
             <Button colorScheme="red" onClick={handleSignOut}>
               Sign out
             </Button>
-            <Button>Cancel</Button>
+            <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
