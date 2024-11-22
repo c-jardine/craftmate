@@ -24,6 +24,7 @@ import { FaEllipsis } from "react-icons/fa6";
 import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { Detail } from "~/components/detail";
+import { PageSection } from "~/components/page-section";
 import {
   Character,
   formatCurrency,
@@ -49,7 +50,6 @@ export function RecipeViewer(
   const {
     name,
     sku,
-    upc,
     retailPrice,
     retailMargin,
     wholesalePrice,
@@ -112,10 +112,20 @@ export function RecipeViewer(
                 </Menu>
               </HStack>
 
-              <SimpleGrid columns={3} gap={4}>
-                <Detail title="SKU" details={sku ?? Character.EM_DASH} />
+              {sku && (
+                <SimpleGrid columns={3} gap={4}>
+                  <Detail title="SKU" details={sku ?? Character.EM_DASH} />
+                </SimpleGrid>
+              )}
 
-                <Detail title="UPC" details={upc ?? Character.EM_DASH} />
+              <SimpleGrid columns={3} gap={4}>
+                <Detail
+                  title="Batch size"
+                  details={formatQuantityWithUnitAbbrev({
+                    quantity: batchSize,
+                    quantityUnit: batchSizeUnit,
+                  })}
+                />
 
                 <Detail
                   title="Cost per unit"
@@ -125,39 +135,69 @@ export function RecipeViewer(
                 />
 
                 <Detail
-                  title="MSRP"
-                  details={`${
-                    retailPrice
-                      ? formatCurrency(toNumber(retailPrice))
-                      : Character.EM_DASH
-                  } • ${retailMarginFormatted}`}
+                  title="Cost per batch"
+                  details={`${formatCurrency(
+                    toNumber(costPerUnit.times(batchSize))
+                  )} /${batchSizeUnit.abbrevSingular}`}
                 />
+              </SimpleGrid>
 
-                <Detail
-                  title="Wholesale"
-                  details={`${
-                    wholesalePrice
-                      ? formatCurrency(toNumber(wholesalePrice))
-                      : Character.EM_DASH
-                  } • ${wholesaleMarginFormatted}`}
-                />
+              <Heading as="h2" fontSize="lg">
+                Pricing
+              </Heading>
+
+              <SimpleGrid columns={2} gap={4}>
+                <PageSection position="relative">
+                  <Tag
+                    position="absolute"
+                    top={-3}
+                    left="50%"
+                    transform="translateX(-50%)"
+                  >
+                    Retail
+                  </Tag>
+                  <SimpleGrid columns={2} gap={4}>
+                    <Detail
+                      title="Price"
+                      details={
+                        retailPrice
+                          ? formatCurrency(toNumber(retailPrice))
+                          : Character.EM_DASH
+                      }
+                    />
+                    <Detail title="Margin" details={retailMarginFormatted} />
+                  </SimpleGrid>
+                </PageSection>
+
+                <PageSection position="relative">
+                  <Tag
+                    position="absolute"
+                    top={-3}
+                    left="50%"
+                    transform="translateX(-50%)"
+                  >
+                    Wholesale
+                  </Tag>
+                  <SimpleGrid columns={2} gap={4}>
+                    <Detail
+                      title="Price"
+                      details={
+                        wholesalePrice
+                          ? formatCurrency(toNumber(wholesalePrice))
+                          : Character.EM_DASH
+                      }
+                    />
+                    <Detail title="Margin" details={wholesaleMarginFormatted} />
+                  </SimpleGrid>
+                </PageSection>
               </SimpleGrid>
 
               {/* Materials list */}
               {materials.length > 0 && (
                 <>
-                  <HStack justifyContent="space-between" alignItems="center">
-                    <Heading as="h2" fontSize="lg">
-                      Materials used
-                    </Heading>
-                    <Tag>
-                      Batch size:{" "}
-                      {formatQuantityWithUnitAbbrev({
-                        quantity: batchSize,
-                        quantityUnit: batchSizeUnit,
-                      })}
-                    </Tag>
-                  </HStack>
+                  <Heading as="h2" fontSize="lg">
+                    Materials used
+                  </Heading>
                   <RecipeMaterialsTable {...props} />
                   <RecipeMaterialsCards {...props} />
                 </>

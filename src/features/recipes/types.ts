@@ -5,7 +5,6 @@ import { CustomZod } from "~/utils/form";
 export const createRecipeFormSchema = z.object({
   name: z.string().min(1, "Required"),
   sku: z.string().optional(),
-  upc: z.string().optional(),
   retailPrice: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
   wholesalePrice: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
   materials: z
@@ -37,7 +36,6 @@ export const updateRecipeFormSchema = z.object({
   id: z.string(),
   name: z.string().min(1, "Required"),
   sku: z.string().optional(),
-  upc: z.string().optional(),
   retailPrice: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
   wholesalePrice: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
   materials: z

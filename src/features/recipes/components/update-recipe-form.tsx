@@ -80,10 +80,7 @@ export function UpdateRecipeForm(
                 isRequired
               />
 
-              <SimpleGrid columns={2} gap={4}>
-                <TextInput control={control} name="sku" label="SKU" />
-                <TextInput control={control} name="upc" label="UPC" />
-              </SimpleGrid>
+              <TextInput control={control} name="sku" label="SKU" />
 
               <SimpleGrid columns={2} gap={4}>
                 <FormControl isInvalid={!!errors.retailPrice}>

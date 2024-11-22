@@ -138,7 +138,6 @@ model Recipe {
     id              String           @id @default(uuid())
     name            String           @unique
     sku             String?
-    upc             String?
     retailPrice     Decimal?
     wholesalePrice  Decimal?
     retailMargin    Decimal?

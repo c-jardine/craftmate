@@ -72,12 +72,6 @@ export function RecipesCards() {
               />
 
               <Detail
-                title="UPC"
-                details={recipe.upc ?? Character.EM_DASH}
-                fontSize="sm"
-              />
-
-              <Detail
                 title="Unit cost"
                 details={`${formatCurrency(toNumber(recipe.costPerUnit))} /${
                   recipe.batchSizeUnit.abbrevSingular
