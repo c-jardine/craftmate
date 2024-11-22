@@ -82,8 +82,8 @@ export function CreateRecipeForm() {
               />
 
               <SimpleGrid columns={2} gap={4}>
-                <TextInput control={control} name="sku" label="UPC" />
-                <TextInput control={control} name="upc" label="SKU" />
+                <TextInput control={control} name="sku" label="SKU" />
+                <TextInput control={control} name="upc" label="UPC" />
               </SimpleGrid>
 
               <SimpleGrid columns={2} gap={4}>
