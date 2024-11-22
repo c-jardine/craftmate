@@ -182,6 +182,11 @@ export const recipeRouter = createTRPCRouter({
       orderBy: { name: "asc" },
       include: {
         materials: {
+          orderBy: {
+            material: {
+              name: "asc",
+            },
+          },
           include: {
             material: true,
             quantityUnit: true,
