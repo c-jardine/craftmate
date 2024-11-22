@@ -1,5 +1,5 @@
 import type { MaterialQuantityUpdateAction, Prisma } from "@prisma/client";
-import { type QuantityStatus } from "~/types/status";
+import { type QuantityStatus } from "~/types/quantity";
 
 interface CalculateAdjustedQuantityOptions {
   /** The original quantity. */

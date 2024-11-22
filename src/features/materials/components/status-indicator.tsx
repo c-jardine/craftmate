@@ -6,7 +6,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FaCircle } from "react-icons/fa6";
-import { type QuantityStatus } from "~/types/status";
+import { type QuantityStatus } from "~/types/quantity";
 import { type RouterOutputs } from "~/utils/api";
 import { getStockStatus } from "~/utils/inventory";
 
