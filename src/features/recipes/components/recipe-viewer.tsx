@@ -35,6 +35,7 @@ import { DeleteRecipeButton } from "./delete-recipe-button";
 import { RecipeMaterialsCards } from "./recipe-materials-cards";
 import { RecipeMaterialsTable } from "./recipe-materials-table";
 import { type RecipesTableRows } from "./recipes-table";
+import { UpdateRecipeForm } from "./update-recipe-form";
 
 export function RecipeViewer(
   props: CustomCellRendererProps<RecipesTableRows>["data"]
@@ -98,7 +99,7 @@ export function RecipeViewer(
           <DrawerBody>
             <Stack spacing={4} h="full">
               <HStack>
-                {/* <UpdateMaterialForm {...props} /> */}
+                <UpdateRecipeForm {...props} />
                 <Menu>
                   <MenuButton
                     as={IconButton}
