@@ -16,7 +16,7 @@ import { api, type RouterOutputs } from "~/utils/api";
 import { Character, formatCurrency } from "~/utils/formatting";
 import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
-import { CostPerUnitRenderer } from "./cost-per-unit-renderer";
+import { CostPerBatchRenderer } from "./cost-per-batch-renderer";
 import { NameRenderer } from "./name-renderer";
 
 // Table column type definition
@@ -53,9 +53,37 @@ export function RecipesTable() {
         cellRenderer: NameRenderer,
       },
       {
-        headerName: "Cost per unit",
-        field: "costPerUnit",
-        cellRenderer: CostPerUnitRenderer,
+        headerName: "Cost of goods",
+        marryChildren: true,
+        children: [
+          {
+            headerName: "per unit",
+            field: "costPerUnit",
+            cellStyle: {
+              display: "flex",
+              alignItems: "center",
+            },
+            valueFormatter: (
+              params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+            ) => {
+              if (!params.value || !params.data) {
+                return Character.EM_DASH;
+              }
+              return `${formatCurrency(toNumber(params.value))} /${
+                params.data.batchSizeUnit.abbrevSingular
+              }`;
+            },
+          },
+          {
+            headerName: "per batch",
+            field: "costPerBatch",
+            cellStyle: {
+              display: "flex",
+              alignItems: "center",
+            },
+            cellRenderer: CostPerBatchRenderer,
+          },
+        ],
       },
       {
         headerName: "MSRP",
@@ -160,6 +188,7 @@ export function RecipesTable() {
         type: "fitCellContents",
         colIds: [
           "costPerUnit",
+          "costPerBatch",
           "retailPrice",
           "retailMargin",
           "wholesalePrice",

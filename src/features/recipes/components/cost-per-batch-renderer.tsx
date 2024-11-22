@@ -6,25 +6,19 @@ import { formatCurrency } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
 import { type RecipesTableRows } from "./recipes-table";
 
-export function CostPerUnitRenderer({
+export function CostPerBatchRenderer({
   node,
 }: CustomCellRendererProps<RecipesTableRows>) {
   if (!node.data) {
     return null;
   }
 
-  const { batchSizeUnit, costPerUnit } = node.data;
+  const { batchSize, batchSizeUnit, costPerUnit } = node.data;
 
   return (
-    <HStack
-      py={2}
-      justifyContent="space-between"
-      alignItems="center"
-      wrap="wrap"
-    >
-      <Text>
-        {formatCurrency(toNumber(costPerUnit))} /{batchSizeUnit.abbrevSingular}
-      </Text>
-    </HStack>
+    <Text>
+      {formatCurrency(toNumber(costPerUnit.times(batchSize)))} /
+      {batchSizeUnit.abbrevSingular}
+    </Text>
   );
 }
