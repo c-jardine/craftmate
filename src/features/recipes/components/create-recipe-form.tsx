@@ -29,7 +29,7 @@ import { ControlledSelect } from "~/components/controlled-select";
 import { TextInput } from "~/components/text-input";
 import { useMaterialOptions } from "~/hooks/use-material-options";
 import { useQuantityUnitOptions } from "~/hooks/use-quantity-unit-options";
-import { type SelectInput } from "~/utils/selectInput";
+import { type SelectInput } from "~/utils/form";
 import { useCreateRecipe } from "../hooks/use-create-recipe";
 import { type CreateRecipeFormType } from "../types";
 import { useRecipeCategoriesOptions } from "./use-recipe-categories-options";

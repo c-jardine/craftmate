@@ -2,8 +2,8 @@ import { Text } from "@chakra-ui/react";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
-import { calculateAdjustedQuantity } from "~/utils/quantityAdjustment";
+import { formatQuantityWithUnitAbbrev } from "~/utils/formatting";
+import { calculateAdjustedQuantity } from "~/utils/inventory";
 import { type MaterialLogsTableRows } from "./material-logs-table";
 
 export function NewQuantityRenderer({

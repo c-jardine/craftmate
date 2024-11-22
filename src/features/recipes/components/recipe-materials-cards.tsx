@@ -6,8 +6,8 @@ import {
   StackDivider,
   Text,
 } from "@chakra-ui/react";
-
 import { FaCircle } from "react-icons/fa6";
+
 import {
   Character,
   formatCurrency,

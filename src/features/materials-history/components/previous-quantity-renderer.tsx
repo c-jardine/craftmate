@@ -2,7 +2,7 @@ import { Text } from "@chakra-ui/react";
 
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import { formatQuantityWithUnitAbbrev } from "~/utils/formatting";
 import { type MaterialLogsTableRows } from "./material-logs-table";
 
 export function PreviousQuantityRenderer({
