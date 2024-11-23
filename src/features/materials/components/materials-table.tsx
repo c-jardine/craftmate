@@ -1,6 +1,5 @@
-import { Flex, useToast } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { type Prisma, type Vendor } from "@prisma/client";
-import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import PuffLoader from "react-spinners/PuffLoader";
 
@@ -19,6 +18,7 @@ import {
   formatQuantityWithUnitAbbrev,
 } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
+import { useDeleteMaterials } from "../hooks/use-delete-materials";
 import { NameRenderer } from "./name-renderer";
 import { QuantityRenderer } from "./quantity-renderer";
 import { StatusRenderer } from "./status-renderer";
@@ -29,33 +29,8 @@ export type MaterialsTableRows = RouterOutputs["material"]["getAll"][0] & {
 };
 
 export function MaterialsTable() {
-  const { data: session } = useSession();
-
   // Fetch materials query
-  const { data: materials, isLoading } = api.material.getAll.useQuery(
-    undefined,
-    {
-      enabled: session?.user !== undefined,
-    }
-  );
-
-  const toast = useToast();
-
-  const utils = api.useUtils();
-  const deleteMutation = api.material.deleteAll.useMutation({
-    onSuccess: async ({ count }) => {
-      toast({
-        title: "Deleted materials",
-        description: `Deleted ${count} materials`,
-        status: "success",
-      });
-      await utils.material.getAll.invalidate();
-    },
-  });
-
-  function onDelete(data: string[]) {
-    deleteMutation.mutate(data);
-  }
+  const { data: materials, isLoading } = api.material.getAll.useQuery();
 
   // Materials data as state
   const [rowData, setRowData] = useState<MaterialsTableRows[]>([]);
@@ -71,6 +46,9 @@ export function MaterialsTable() {
       );
     }
   }, [materials]);
+
+  // Get onDelete handler.
+  const { onDelete } = useDeleteMaterials();
 
   const colDefs: ColDef<MaterialsTableRows>[] = [
     {
@@ -104,7 +82,6 @@ export function MaterialsTable() {
     {
       headerName: "Min. quantity",
       field: "minQuantity",
-      filter: true,
       cellStyle: {
         display: "flex",
         alignItems: "center",
