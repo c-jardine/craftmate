@@ -7,6 +7,7 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FaHistory } from "react-icons/fa";
@@ -14,6 +15,7 @@ import { FaEllipsis } from "react-icons/fa6";
 
 import { PageHeader } from "~/components/page-header";
 import { PageLoader } from "~/components/page-loader";
+import { PageSection } from "~/components/page-section";
 import { CreateRecipeForm } from "~/features/recipes/components/create-recipe-form";
 import { RecipesCards } from "~/features/recipes/components/recipes-cards";
 import { RecipesTable } from "~/features/recipes/components/recipes-table";
@@ -53,10 +55,19 @@ export default function Recipes() {
           <CreateRecipeForm />
         </PageHeader.Content>
       </PageHeader>
-      <>
-        <RecipesTable recipes={recipes} />
-        <RecipesCards recipes={recipes} />
-      </>
+
+      {recipes?.length && recipes.length > 0 ? (
+        <>
+          <RecipesTable recipes={recipes} />
+          <RecipesCards recipes={recipes} />
+        </>
+      ) : (
+        <PageSection>
+          <Text fontStyle="italic" textAlign="center">
+            No recipes to show.
+          </Text>
+        </PageSection>
+      )}
     </Stack>
   );
 }
