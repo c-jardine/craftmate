@@ -12,9 +12,9 @@ import {
   formatQuantityWithUnitAbbrev,
 } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
+import { AvailabilityIndicator } from "./availability-indicator";
 import { MaterialViewer } from "./material-viewer";
 import { QuantityEditor } from "./quantity-editor";
-import { StatusIndicator } from "./status-indicator";
 
 export function MaterialsCards({
   materials,
@@ -35,9 +35,9 @@ export function MaterialsCards({
             display={{ base: "flex", md: "none" }}
           >
             <HStack justifyContent="space-between" alignItems="center">
-              <MaterialViewer {...material} status="In Stock" />
+              <MaterialViewer {...material} />
               {material.quantity && material.minQuantity && (
-                <StatusIndicator {...material} />
+                <AvailabilityIndicator {...material} />
               )}
             </HStack>
 

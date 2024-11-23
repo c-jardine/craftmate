@@ -1,5 +1,4 @@
 import { type Prisma, type Vendor } from "@prisma/client";
-import { useEffect, useState } from "react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
@@ -17,35 +16,20 @@ import {
 } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
 import { useDeleteMaterials } from "../hooks/use-delete-materials";
+import { AvailabilityRenderer } from "./availability-renderer";
 import { NameRenderer } from "./name-renderer";
 import { QuantityRenderer } from "./quantity-renderer";
-import { StatusRenderer } from "./status-renderer";
 
 type MaterialsData = RouterOutputs["material"]["getAll"];
 
 // Table row data type.
-export type MaterialsRowDataType = MaterialsData[0] & {
-  status: string;
-};
+export type MaterialsRowDataType = MaterialsData[0];
 
 export function MaterialsTable({
   materials,
 }: {
   materials: MaterialsData | undefined;
 }) {
-  // Initialize row data.
-  const [rowData, setRowData] = useState<MaterialsRowDataType[]>([]);
-  useEffect(() => {
-    if (materials) {
-      setRowData(
-        materials.map((material) => ({
-          ...material,
-          status: "Format status",
-        }))
-      );
-    }
-  }, [materials]);
-
   // Get onDelete handler.
   const { onDelete } = useDeleteMaterials();
 
@@ -66,9 +50,9 @@ export function MaterialsTable({
       cellRenderer: NameRenderer,
     },
     {
-      headerName: "Status",
-      field: "status",
-      cellRenderer: StatusRenderer,
+      headerName: "Availability",
+      field: "availability",
+      cellRenderer: AvailabilityRenderer,
       cellStyle: {
         display: "flex",
         alignItems: "center",
@@ -142,7 +126,7 @@ export function MaterialsTable({
 
   return (
     <Table<MaterialsRowDataType>
-      rowData={rowData}
+      rowData={materials}
       columnDefs={colDefs}
       autoSizeStrategy={{
         type: "fitCellContents",

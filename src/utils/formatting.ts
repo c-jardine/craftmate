@@ -1,4 +1,4 @@
-import { type Prisma, type QuantityUnit } from "@prisma/client";
+import { Availability, type Prisma, type QuantityUnit } from "@prisma/client";
 
 export const Character = {
   EM_DASH: "—",
@@ -91,4 +91,17 @@ export function formatQuantityWithUnitAbbrev(
   });
 
   return `${options.quantity.toString()} ${quantityUnitText}`;
+}
+
+export function formatAvailability(availability: Availability) {
+  switch (availability) {
+    case Availability.AVAILABLE:
+      return "Available";
+    case Availability.LOW_STOCK:
+      return "Low stock";
+    case Availability.OUT_OF_STOCK:
+      return "Out of stock";
+    default:
+      return Character.EM_DASH;
+  }
 }

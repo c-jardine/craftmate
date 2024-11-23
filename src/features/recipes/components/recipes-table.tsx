@@ -1,5 +1,4 @@
 import { type Prisma } from "@prisma/client";
-import { useEffect, useState } from "react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
@@ -27,18 +26,6 @@ export function RecipesTable({
 }: {
   recipes: RecipesData | undefined;
 }) {
-  // Initialize row data.
-  const [rowData, setRowData] = useState<RecipesRowDataType[]>([]);
-  useEffect(() => {
-    if (recipes) {
-      setRowData(
-        recipes.map((recipe) => ({
-          ...recipe,
-        }))
-      );
-    }
-  }, [recipes]);
-
   // Get onDelete handler.
   const { onDelete } = useDeleteRecipes();
 
@@ -188,7 +175,7 @@ export function RecipesTable({
 
   return (
     <Table<RecipesRowDataType>
-      rowData={rowData}
+      rowData={recipes}
       columnDefs={colDefs}
       autoSizeStrategy={{
         type: "fitCellContents",

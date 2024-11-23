@@ -1,5 +1,8 @@
-import type { MaterialQuantityUpdateAction, Prisma } from "@prisma/client";
-import { type QuantityStatus } from "~/types/quantity";
+import {
+  Availability,
+  type MaterialQuantityUpdateAction,
+  type Prisma,
+} from "@prisma/client";
 
 interface CalculateAdjustedQuantityOptions {
   /** The original quantity. */
@@ -47,16 +50,12 @@ export function calculateAdjustedQuantity({
   }
 }
 
-function calculateStockStatus(
-  quantity: Prisma.Decimal | null,
-  minQuantity: Prisma.Decimal | null
-): QuantityStatus {
-  if (!quantity || !minQuantity) {
-    return null;
-  }
-
+export function calculateAvailability(
+  quantity: Prisma.Decimal,
+  minQuantity: Prisma.Decimal
+): Availability {
   if (quantity.equals(0)) {
-    return "Out of stock";
+    return Availability.OUT_OF_STOCK;
   }
 
   // const ratio = quantity.div(minQuantity);
@@ -64,21 +63,8 @@ function calculateStockStatus(
   //   return "Low stock";
   // }
   if (quantity.lessThan(minQuantity)) {
-    return "Low stock";
+    return Availability.LOW_STOCK;
   }
 
-  return "Available";
-}
-
-/**
- * Get the stock status.
- * @param quantity The current stock.
- * @param minQuantity The minimum stock.
- * @returns The stock status.
- */
-export function getStockStatus(
-  quantity: Prisma.Decimal | null,
-  minQuantity: Prisma.Decimal | null
-) {
-  return calculateStockStatus(quantity, minQuantity);
+  return Availability.AVAILABLE;
 }

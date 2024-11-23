@@ -34,10 +34,13 @@ export function useUpdateQuantity(
     },
   });
 
+  const { minQuantity } = props;
+
   const form = useForm<UpdateMaterialQuantityFormType>({
     defaultValues: {
       materialId: props.id ?? undefined,
       originalQuantity: props.quantity?.toString() ?? "0",
+      minQuantity: minQuantity.toString(),
     },
     resolver: zodResolver(updateMaterialQuantityFormSchema),
   });
@@ -55,9 +58,10 @@ export function useUpdateQuantity(
       reset({
         materialId: data.id,
         originalQuantity: data.quantity?.toString() ?? "0",
+        minQuantity: minQuantity.toString(),
       });
     },
-    [reset]
+    [minQuantity, reset]
   );
 
   useEffect(() => {
