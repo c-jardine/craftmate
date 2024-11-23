@@ -1,4 +1,3 @@
-import { Flex } from "@chakra-ui/react";
 import { type Prisma } from "@prisma/client";
 import { useEffect, useState } from "react";
 
@@ -10,9 +9,8 @@ import {
   type ValueFormatterParams,
 } from "node_modules/ag-grid-community/dist/types/core/main";
 
-import PuffLoader from "react-spinners/PuffLoader";
 import { Table } from "~/components/table";
-import { api, type RouterOutputs } from "~/utils/api";
+import { type RouterOutputs } from "~/utils/api";
 import { Character, formatCurrency } from "~/utils/formatting";
 import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
@@ -22,10 +20,11 @@ import { NameRenderer } from "./name-renderer";
 // Table column type definition.
 export type RecipesTableRows = RouterOutputs["recipe"]["getAll"][0];
 
-export function RecipesTable() {
-  // Fetch materials query.
-  const { data: recipes, isLoading } = api.recipe.getAll.useQuery();
-
+export function RecipesTable({
+  recipes,
+}: {
+  recipes: RouterOutputs["recipe"]["getAll"] | undefined;
+}) {
   // Initialize row data.
   const [rowData, setRowData] = useState<RecipesTableRows[]>([]);
   useEffect(() => {
@@ -40,6 +39,10 @@ export function RecipesTable() {
 
   // Get onDelete handler.
   const { onDelete } = useDeleteRecipes();
+
+  if (!recipes) {
+    return null;
+  }
 
   // Define table columns.
   const colDefs: (ColDef<RecipesTableRows> | ColGroupDef<RecipesTableRows>)[] =
@@ -178,19 +181,6 @@ export function RecipesTable() {
         ],
       },
     ];
-
-  // Show spinner if query is loading.
-  if (isLoading) {
-    return (
-      <Flex justifyContent="center" alignItems="center" flexGrow={1}>
-        <PuffLoader color="var(--chakra-colors-blue-500)" />
-      </Flex>
-    );
-  }
-
-  if (!recipes) {
-    return null;
-  }
 
   return (
     <Table<RecipesTableRows>

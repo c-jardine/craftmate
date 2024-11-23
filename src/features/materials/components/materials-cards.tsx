@@ -1,12 +1,11 @@
-import { Flex, HStack, SimpleGrid, Stack, Tag } from "@chakra-ui/react";
-import PuffLoader from "react-spinners/PuffLoader";
+import { HStack, SimpleGrid, Stack, Tag } from "@chakra-ui/react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 
 import { Detail } from "~/components/detail";
 import { PageSection } from "~/components/page-section";
-import { api } from "~/utils/api";
+import { type RouterOutputs } from "~/utils/api";
 import {
   Character,
   formatCurrency,
@@ -17,25 +16,17 @@ import { MaterialViewer } from "./material-viewer";
 import { QuantityEditor } from "./quantity-editor";
 import { StatusIndicator } from "./status-indicator";
 
-export function MaterialsCards() {
-  // Fetch materials query
-  const { data: materials, isLoading } = api.material.getAll.useQuery();
-
-  // Show spinner if query is loading
-  if (isLoading) {
-    return (
-      <Flex justifyContent="center" alignItems="center" flexGrow={1}>
-        <PuffLoader color="var(--chakra-colors-blue-500)" />
-      </Flex>
-    );
-  }
-
+export function MaterialsCards({
+  materials,
+}: {
+  materials: RouterOutputs["material"]["getAll"] | undefined;
+}) {
   if (!materials) {
     return null;
   }
 
   return (
-    <Stack spacing={4}>
+    <Stack display={{ base: "flex", md: "none" }} spacing={4}>
       {materials.map((material) => {
         return (
           <PageSection

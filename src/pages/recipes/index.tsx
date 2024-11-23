@@ -13,12 +13,21 @@ import { FaHistory } from "react-icons/fa";
 import { FaEllipsis } from "react-icons/fa6";
 
 import { PageHeader } from "~/components/page-header";
+import { PageLoader } from "~/components/page-loader";
 import { CreateRecipeForm } from "~/features/recipes/components/create-recipe-form";
 import { RecipesCards } from "~/features/recipes/components/recipes-cards";
 import { RecipesTable } from "~/features/recipes/components/recipes-table";
 import { withAuth } from "~/server/auth";
+import { api } from "~/utils/api";
 
 export default function Recipes() {
+  // Fetch recipes query.
+  const { data: recipes, isLoading } = api.recipe.getAll.useQuery();
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
   return (
     <Stack spacing={4} h="full">
       <PageHeader>
@@ -45,8 +54,8 @@ export default function Recipes() {
         </PageHeader.Content>
       </PageHeader>
       <>
-        <RecipesTable />
-        <RecipesCards />
+        <RecipesTable recipes={recipes} />
+        <RecipesCards recipes={recipes} />
       </>
     </Stack>
   );

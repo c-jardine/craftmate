@@ -1,7 +1,5 @@
-import { Flex } from "@chakra-ui/react";
 import { type Prisma, type Vendor } from "@prisma/client";
 import { useEffect, useState } from "react";
-import PuffLoader from "react-spinners/PuffLoader";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
@@ -11,7 +9,7 @@ import {
 } from "node_modules/ag-grid-community/dist/types/core/main";
 
 import { Table } from "~/components/table";
-import { api, type RouterOutputs } from "~/utils/api";
+import { type RouterOutputs } from "~/utils/api";
 import {
   Character,
   formatCurrency,
@@ -28,10 +26,11 @@ export type MaterialsTableRows = RouterOutputs["material"]["getAll"][0] & {
   status: string;
 };
 
-export function MaterialsTable() {
-  // Fetch materials query.
-  const { data: materials, isLoading } = api.material.getAll.useQuery();
-
+export function MaterialsTable({
+  materials,
+}: {
+  materials: RouterOutputs["material"]["getAll"] | undefined;
+}) {
   // Initialize row data.
   const [rowData, setRowData] = useState<MaterialsTableRows[]>([]);
   useEffect(() => {
@@ -47,6 +46,10 @@ export function MaterialsTable() {
 
   // Get onDelete handler.
   const { onDelete } = useDeleteMaterials();
+
+  if (!materials) {
+    return null;
+  }
 
   // Define table columns.
   const colDefs: ColDef<MaterialsTableRows>[] = [
@@ -134,19 +137,6 @@ export function MaterialsTable() {
       },
     },
   ];
-
-  // Show spinner if query is loading.
-  if (isLoading) {
-    return (
-      <Flex justifyContent="center" alignItems="center" flexGrow={1}>
-        <PuffLoader color="var(--chakra-colors-blue-500)" />
-      </Flex>
-    );
-  }
-
-  if (!materials) {
-    return null;
-  }
 
   return (
     <Table<MaterialsTableRows>

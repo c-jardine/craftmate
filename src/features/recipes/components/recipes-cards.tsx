@@ -1,35 +1,26 @@
-import { Flex, HStack, SimpleGrid, Stack, Tag, Text } from "@chakra-ui/react";
-import PuffLoader from "react-spinners/PuffLoader";
+import { HStack, SimpleGrid, Stack, Tag, Text } from "@chakra-ui/react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 
 import { Detail } from "~/components/detail";
 import { PageSection } from "~/components/page-section";
-import { api } from "~/utils/api";
+import { type RouterOutputs } from "~/utils/api";
 import { Character, formatCurrency } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
 import { RecipeViewer } from "./recipe-viewer";
 
-export function RecipesCards() {
-  // Fetch materials query
-  const { data: recipes, isLoading } = api.recipe.getAll.useQuery();
-
-  // Show spinner if query is loading
-  if (isLoading) {
-    return (
-      <Flex justifyContent="center" alignItems="center" flexGrow={1}>
-        <PuffLoader color="var(--chakra-colors-blue-500)" />
-      </Flex>
-    );
-  }
-
+export function RecipesCards({
+  recipes,
+}: {
+  recipes: RouterOutputs["recipe"]["getAll"] | undefined;
+}) {
   if (!recipes) {
     return null;
   }
 
   return (
-    <Stack>
+    <Stack display={{ base: "flex", md: "none" }}>
       {recipes.map((recipe) => {
         // Calculate the margin.
         const margin = recipe.retailPrice
