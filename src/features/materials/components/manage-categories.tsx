@@ -24,7 +24,7 @@ export function ManageCategories() {
       control,
       watch,
       handleSubmit,
-      formState: { isSubmitting },
+      formState: { isValid, isDirty, isSubmitting },
     },
     fieldArray: { fields, append, remove },
     onSubmit,
@@ -40,10 +40,12 @@ export function ManageCategories() {
       >
         Manage categories
       </MenuItem>
+
       <Modal {...{ isOpen, onClose }}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Manage categories</ModalHeader>
+
           <ModalBody maxH={96} overflowY="scroll">
             <Stack
               as="form"
@@ -58,7 +60,7 @@ export function ManageCategories() {
                   />
                   <IconButton
                     icon={<Icon as={FaTrash} color="red.600" boxSize={3} />}
-                    aria-label={`Edit ${watch(
+                    aria-label={`Delete ${watch(
                       `categories.${index}.name`
                     )} category`}
                     variant="outline"
@@ -70,6 +72,7 @@ export function ManageCategories() {
               ))}
             </Stack>
           </ModalBody>
+
           <ModalFooter gap={4}>
             <Stack w="full">
               <Button
@@ -77,21 +80,12 @@ export function ManageCategories() {
                 variant="primary"
                 w="full"
                 onClick={() => append({ id: "", name: "" })}
-                isDisabled={(() => {
-                  const length = watch("categories").length;
-                  const lastCategory = watch("categories")[length - 1];
-
-                  if (!lastCategory?.name) {
-                    return true;
-                  }
-
-                  return false;
-                })()}
+                isDisabled={!isValid || isSubmitting}
               >
                 Create new category
               </Button>
 
-              <HStack mt={8} spacing={4} justifyContent="flex-end">
+              <HStack mt={6} spacing={4} justifyContent="flex-end">
                 <ScaleFade in={!isSubmitting} initialScale={0.9}>
                   <Button size="sm" onClick={onClose}>
                     Cancel
@@ -102,7 +96,7 @@ export function ManageCategories() {
                   form="update-categories-form"
                   variant="primary"
                   size="sm"
-                  isDisabled={isSubmitting}
+                  isDisabled={!isValid || !isDirty || isSubmitting}
                   isLoading={isSubmitting}
                 >
                   Save
