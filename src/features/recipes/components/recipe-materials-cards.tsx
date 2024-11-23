@@ -13,12 +13,12 @@ import {
   formatCurrency,
   formatQuantityWithUnitAbbrev,
 } from "~/utils/formatting";
-import { type RecipesTableRows } from "./recipes-table";
+import { type RecipesRowDataType } from "./recipes-table";
 
 export function RecipeMaterialsCards({
   batchSize,
   materials,
-}: RecipesTableRows) {
+}: RecipesRowDataType) {
   return (
     <Stack
       display={{ base: "flex", md: "none" }}

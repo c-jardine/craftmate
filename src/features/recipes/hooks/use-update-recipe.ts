@@ -7,11 +7,11 @@ import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { api } from "~/utils/api";
 import { mapToSelectInput } from "~/utils/form";
-import { type RecipesTableRows } from "../components/recipes-table";
+import { type RecipesRowDataType } from "../components/recipes-table";
 import { updateRecipeFormSchema, type UpdateRecipeFormType } from "../types";
 
 export function useUpdateRecipe(
-  props: CustomCellRendererProps<RecipesTableRows>["data"]
+  props: CustomCellRendererProps<RecipesRowDataType>["data"]
 ) {
   const disclosure = useDisclosure();
   const toast = useToast();
@@ -40,7 +40,7 @@ export function useUpdateRecipe(
       materials,
       categories,
       notes,
-    }: RecipesTableRows) => {
+    }: RecipesRowDataType) => {
       reset({
         id,
         name,

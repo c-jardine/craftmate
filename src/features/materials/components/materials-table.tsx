@@ -21,18 +21,20 @@ import { NameRenderer } from "./name-renderer";
 import { QuantityRenderer } from "./quantity-renderer";
 import { StatusRenderer } from "./status-renderer";
 
-// Table column type definition.
-export type MaterialsTableRows = RouterOutputs["material"]["getAll"][0] & {
+type MaterialsData = RouterOutputs["material"]["getAll"];
+
+// Table row data type.
+export type MaterialsRowDataType = MaterialsData[0] & {
   status: string;
 };
 
 export function MaterialsTable({
   materials,
 }: {
-  materials: RouterOutputs["material"]["getAll"] | undefined;
+  materials: MaterialsData | undefined;
 }) {
   // Initialize row data.
-  const [rowData, setRowData] = useState<MaterialsTableRows[]>([]);
+  const [rowData, setRowData] = useState<MaterialsRowDataType[]>([]);
   useEffect(() => {
     if (materials) {
       setRowData(
@@ -52,7 +54,7 @@ export function MaterialsTable({
   }
 
   // Define table columns.
-  const colDefs: ColDef<MaterialsTableRows>[] = [
+  const colDefs: ColDef<MaterialsRowDataType>[] = [
     {
       headerName: "Name",
       field: "name",
@@ -89,7 +91,7 @@ export function MaterialsTable({
         alignItems: "center",
       },
       valueFormatter: (
-        params: ValueFormatterParams<MaterialsTableRows, Prisma.Decimal>
+        params: ValueFormatterParams<MaterialsRowDataType, Prisma.Decimal>
       ) => {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
@@ -108,7 +110,7 @@ export function MaterialsTable({
         alignItems: "center",
       },
       valueFormatter: (
-        params: ValueFormatterParams<MaterialsTableRows, Prisma.Decimal>
+        params: ValueFormatterParams<MaterialsRowDataType, Prisma.Decimal>
       ) => {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
@@ -127,7 +129,7 @@ export function MaterialsTable({
         alignItems: "center",
       },
       valueFormatter: (
-        params: ValueFormatterParams<MaterialsTableRows, Vendor>
+        params: ValueFormatterParams<MaterialsRowDataType, Vendor>
       ) => {
         if (!params.value) {
           return Character.EM_DASH;
@@ -139,7 +141,7 @@ export function MaterialsTable({
   ];
 
   return (
-    <Table<MaterialsTableRows>
+    <Table<MaterialsRowDataType>
       rowData={rowData}
       columnDefs={colDefs}
       autoSizeStrategy={{

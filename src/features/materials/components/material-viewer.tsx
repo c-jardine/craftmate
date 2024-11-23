@@ -33,11 +33,11 @@ import {
 import { toNumber } from "~/utils/prisma";
 import { DeleteMaterialButton } from "./delete-material-button";
 import { MaterialUpdateLogs } from "./material-update-logs";
-import { type MaterialsTableRows } from "./materials-table";
+import { type MaterialsRowDataType } from "./materials-table";
 import { UpdateMaterialForm } from "./update-material-form";
 
 export function MaterialViewer(
-  props: CustomCellRendererProps<MaterialsTableRows>["data"]
+  props: CustomCellRendererProps<MaterialsRowDataType>["data"]
 ) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 

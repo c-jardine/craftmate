@@ -34,11 +34,11 @@ import { useQuantityUnitOptions } from "~/hooks/use-quantity-unit-options";
 import { type SelectInput } from "~/utils/form";
 import { useUpdateRecipe } from "../hooks/use-update-recipe";
 import { type UpdateRecipeFormType } from "../types";
-import { type RecipesTableRows } from "./recipes-table";
+import { type RecipesRowDataType } from "./recipes-table";
 import { useRecipeCategoriesOptions } from "./use-recipe-categories-options";
 
 export function UpdateRecipeForm(
-  props: CustomCellRendererProps<RecipesTableRows>["data"]
+  props: CustomCellRendererProps<RecipesRowDataType>["data"]
 ) {
   const {
     form: {

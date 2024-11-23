@@ -1,11 +1,11 @@
 import { type CustomCellRendererProps } from "ag-grid-react";
 
-import { type MaterialsTableRows } from "./materials-table";
+import { type MaterialsRowDataType } from "./materials-table";
 import { QuantityEditor } from "./quantity-editor";
 
 export function QuantityRenderer({
   node,
-}: CustomCellRendererProps<MaterialsTableRows>) {
+}: CustomCellRendererProps<MaterialsRowDataType>) {
   if (!node.data) {
     return null;
   }

@@ -35,11 +35,11 @@ import { toNumber } from "~/utils/prisma";
 import { DeleteRecipeButton } from "./delete-recipe-button";
 import { RecipeMaterialsCards } from "./recipe-materials-cards";
 import { RecipeMaterialsTable } from "./recipe-materials-table";
-import { type RecipesTableRows } from "./recipes-table";
+import { type RecipesRowDataType } from "./recipes-table";
 import { UpdateRecipeForm } from "./update-recipe-form";
 
 export function RecipeViewer(
-  props: CustomCellRendererProps<RecipesTableRows>["data"]
+  props: CustomCellRendererProps<RecipesRowDataType>["data"]
 ) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 

@@ -10,12 +10,12 @@ import {
   formatQuantityWithUnitAbbrev,
 } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
-import { type RecipesTableRows } from "./recipes-table";
+import { type RecipesRowDataType } from "./recipes-table";
 
 export function RecipeMaterialsTable({
   batchSize,
   materials,
-}: RecipesTableRows) {
+}: RecipesRowDataType) {
   type RecipeMaterialsRows = {
     name: string;
     batchQuantity: string;
