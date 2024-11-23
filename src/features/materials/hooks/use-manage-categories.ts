@@ -11,10 +11,10 @@ import { api } from "~/utils/api";
 import { useMaterialCategoriesOptions } from "./use-material-categories-options";
 
 /**
- * Custom hook containing logic for managing categories.
+ * Hook containing logic for managing categories.
  */
 export function useManageCategories() {
-  // Form initialization
+  // Form initialization.
   const form = useForm<UpdateCategoriesFormType>({
     defaultValues: {
       categories: [{ id: "", name: "" }],

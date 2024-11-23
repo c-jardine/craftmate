@@ -23,19 +23,17 @@ import { NameRenderer } from "./name-renderer";
 import { QuantityRenderer } from "./quantity-renderer";
 import { StatusRenderer } from "./status-renderer";
 
-// Table column type definition
+// Table column type definition.
 export type MaterialsTableRows = RouterOutputs["material"]["getAll"][0] & {
   status: string;
 };
 
 export function MaterialsTable() {
-  // Fetch materials query
+  // Fetch materials query.
   const { data: materials, isLoading } = api.material.getAll.useQuery();
 
-  // Materials data as state
+  // Initialize row data.
   const [rowData, setRowData] = useState<MaterialsTableRows[]>([]);
-
-  // Update table data when the data is available
   useEffect(() => {
     if (materials) {
       setRowData(
@@ -50,6 +48,7 @@ export function MaterialsTable() {
   // Get onDelete handler.
   const { onDelete } = useDeleteMaterials();
 
+  // Define table columns.
   const colDefs: ColDef<MaterialsTableRows>[] = [
     {
       headerName: "Name",
@@ -136,7 +135,7 @@ export function MaterialsTable() {
     },
   ];
 
-  // Show spinner if query is loading
+  // Show spinner if query is loading.
   if (isLoading) {
     return (
       <Flex justifyContent="center" alignItems="center" flexGrow={1}>

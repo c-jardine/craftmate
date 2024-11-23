@@ -19,16 +19,15 @@ import { toNumber } from "~/utils/prisma";
 import { useDeleteRecipes } from "../hooks/use-delete-recipes";
 import { NameRenderer } from "./name-renderer";
 
-// Table column type definition
+// Table column type definition.
 export type RecipesTableRows = RouterOutputs["recipe"]["getAll"][0];
 
 export function RecipesTable() {
-  // Fetch materials query
+  // Fetch materials query.
   const { data: recipes, isLoading } = api.recipe.getAll.useQuery();
 
+  // Initialize row data.
   const [rowData, setRowData] = useState<RecipesTableRows[]>([]);
-
-  // Update table data when the data is available
   useEffect(() => {
     if (recipes) {
       setRowData(
@@ -42,6 +41,7 @@ export function RecipesTable() {
   // Get onDelete handler.
   const { onDelete } = useDeleteRecipes();
 
+  // Define table columns.
   const colDefs: (ColDef<RecipesTableRows> | ColGroupDef<RecipesTableRows>)[] =
     [
       {
@@ -179,7 +179,7 @@ export function RecipesTable() {
       },
     ];
 
-  // Show spinner if query is loading
+  // Show spinner if query is loading.
   if (isLoading) {
     return (
       <Flex justifyContent="center" alignItems="center" flexGrow={1}>
