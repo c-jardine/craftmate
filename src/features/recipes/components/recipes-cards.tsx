@@ -33,7 +33,7 @@ export function RecipesCards() {
       {recipes.map((recipe) => {
         // Calculate the margin.
         const margin = recipe.retailPrice
-          ? recipe.retailPrice.minus(recipe.costPerUnit).div(recipe.retailPrice)
+          ? recipe.retailPrice.minus(recipe.cogsUnit).div(recipe.retailPrice)
           : undefined;
 
         // Format the margin for display.
@@ -73,7 +73,7 @@ export function RecipesCards() {
 
               <Detail
                 title="Unit cost"
-                details={`${formatCurrency(toNumber(recipe.costPerUnit))} /${
+                details={`${formatCurrency(toNumber(recipe.cogsUnit))} /${
                   recipe.batchSizeUnit.abbrevSingular
                 }`}
                 alignItems="flex-end"

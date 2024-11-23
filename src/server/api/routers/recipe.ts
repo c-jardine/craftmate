@@ -16,35 +16,36 @@ export const recipeRouter = createTRPCRouter({
         ctx,
         input: { materials, batchSizeUnit, categories, ...rest },
       }) => {
-        const totalCost = materials.reduce((acc, recipeMaterial) => {
+        const cogsBatch = materials.reduce((acc, recipeMaterial) => {
           const quantity = toDecimal(recipeMaterial.quantity);
-          const costPerUnit = recipeMaterial.material.value.cost ?? 0;
-          const totalMaterialCost = quantity.times(costPerUnit);
+          const cogsUnit = recipeMaterial.material.value.cost ?? 0;
+          const totalMaterialCost = quantity.times(cogsUnit);
           return acc.plus(totalMaterialCost);
         }, toDecimal(0));
 
-        const costPerUnit = totalCost.div(rest.batchSize);
+        const cogsUnit = cogsBatch.div(rest.batchSize);
 
         const retailMargin =
-          rest.retailPrice && costPerUnit
+          rest.retailPrice && cogsUnit
             ? calculateMargin({
                 revenue: toDecimal(rest.retailPrice),
-                costOfGoods: costPerUnit,
+                costOfGoods: cogsUnit,
               })
             : null;
 
         const wholesaleMargin =
-          rest.wholesalePrice && costPerUnit
+          rest.wholesalePrice && cogsUnit
             ? calculateMargin({
                 revenue: toDecimal(rest.wholesalePrice),
-                costOfGoods: costPerUnit,
+                costOfGoods: cogsUnit,
               })
             : null;
 
         return db.recipe.create({
           data: {
             ...rest,
-            costPerUnit,
+            cogsUnit,
+            cogsBatch,
             retailMargin,
             wholesaleMargin,
             materials: {
@@ -93,28 +94,28 @@ export const recipeRouter = createTRPCRouter({
         ctx,
         input: { id, materials, batchSizeUnit, categories, ...rest },
       }) => {
-        const totalCost = materials.reduce((acc, recipeMaterial) => {
+        const cogsBatch = materials.reduce((acc, recipeMaterial) => {
           const quantity = toDecimal(recipeMaterial.quantity);
-          const costPerUnit = recipeMaterial.material.value.cost ?? 0;
-          const totalMaterialCost = quantity.times(costPerUnit);
+          const cogsUnit = recipeMaterial.material.value.cost ?? 0;
+          const totalMaterialCost = quantity.times(cogsUnit);
           return acc.plus(totalMaterialCost);
         }, toDecimal(0));
 
-        const costPerUnit = totalCost.div(rest.batchSize);
+        const cogsUnit = cogsBatch.div(rest.batchSize);
 
         const retailMargin =
-          rest.retailPrice && costPerUnit
+          rest.retailPrice && cogsUnit
             ? calculateMargin({
                 revenue: toDecimal(rest.retailPrice),
-                costOfGoods: costPerUnit,
+                costOfGoods: cogsUnit,
               })
             : null;
 
         const wholesaleMargin =
-          rest.wholesalePrice && costPerUnit
+          rest.wholesalePrice && cogsUnit
             ? calculateMargin({
                 revenue: toDecimal(rest.wholesalePrice),
-                costOfGoods: costPerUnit,
+                costOfGoods: cogsUnit,
               })
             : null;
 
@@ -131,7 +132,8 @@ export const recipeRouter = createTRPCRouter({
             },
             data: {
               ...rest,
-              costPerUnit,
+              cogsUnit,
+              cogsBatch,
               retailMargin,
               wholesaleMargin,
               materials: {

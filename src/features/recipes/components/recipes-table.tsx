@@ -16,7 +16,6 @@ import { api, type RouterOutputs } from "~/utils/api";
 import { Character, formatCurrency } from "~/utils/formatting";
 import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
-import { CostPerBatchRenderer } from "./cost-per-batch-renderer";
 import { NameRenderer } from "./name-renderer";
 
 // Table column type definition
@@ -58,7 +57,7 @@ export function RecipesTable() {
         children: [
           {
             headerName: "per unit",
-            field: "costPerUnit",
+            field: "cogsUnit",
             cellStyle: {
               display: "flex",
               alignItems: "center",
@@ -76,12 +75,21 @@ export function RecipesTable() {
           },
           {
             headerName: "per batch",
-            field: "costPerBatch",
+            field: "cogsBatch",
             cellStyle: {
               display: "flex",
               alignItems: "center",
             },
-            cellRenderer: CostPerBatchRenderer,
+            valueFormatter: (
+              params: ValueFormatterParams<RecipesTableRows, Prisma.Decimal>
+            ) => {
+              if (!params.value || !params.data) {
+                return Character.EM_DASH;
+              }
+              return `${formatCurrency(toNumber(params.value))} /${
+                params.data.batchSizeUnit.abbrevSingular
+              }`;
+            },
           },
         ],
       },
@@ -187,8 +195,8 @@ export function RecipesTable() {
       autoSizeStrategy={{
         type: "fitCellContents",
         colIds: [
-          "costPerUnit",
-          "costPerBatch",
+          "cogsUnit",
+          "cogsBatch",
           "retailPrice",
           "retailMargin",
           "wholesalePrice",

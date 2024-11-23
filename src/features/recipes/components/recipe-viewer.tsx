@@ -54,7 +54,8 @@ export function RecipeViewer(
     retailMargin,
     wholesalePrice,
     wholesaleMargin,
-    costPerUnit,
+    cogsUnit,
+    cogsBatch,
     batchSize,
     batchSizeUnit,
     materials,
@@ -129,16 +130,16 @@ export function RecipeViewer(
 
                 <Detail
                   title="Cost per unit"
-                  details={`${formatCurrency(toNumber(costPerUnit))} /${
+                  details={`${formatCurrency(toNumber(cogsUnit))} /${
                     batchSizeUnit.abbrevSingular
                   }`}
                 />
 
                 <Detail
                   title="Cost per batch"
-                  details={`${formatCurrency(
-                    toNumber(costPerUnit.times(batchSize))
-                  )} /${batchSizeUnit.abbrevSingular}`}
+                  details={`${formatCurrency(toNumber(cogsBatch))} /${
+                    batchSizeUnit.abbrevSingular
+                  }`}
                 />
               </SimpleGrid>
 
