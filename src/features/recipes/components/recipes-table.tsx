@@ -16,6 +16,7 @@ import { api, type RouterOutputs } from "~/utils/api";
 import { Character, formatCurrency } from "~/utils/formatting";
 import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
+import { useDeleteRecipes } from "../hooks/use-delete-recipes";
 import { NameRenderer } from "./name-renderer";
 
 // Table column type definition
@@ -37,6 +38,9 @@ export function RecipesTable() {
       );
     }
   }, [recipes]);
+
+  // Get onDelete handler.
+  const { onDelete } = useDeleteRecipes();
 
   const colDefs: (ColDef<RecipesTableRows> | ColGroupDef<RecipesTableRows>)[] =
     [
@@ -206,7 +210,7 @@ export function RecipesTable() {
       containerProps={{
         display: { base: "none", md: "block" },
       }}
-      // onDelete={onDelete}
+      onDelete={onDelete}
     />
   );
 }

@@ -1,3 +1,4 @@
+import { z } from "zod";
 import {
   createRecipeFormSchema,
   deleteRecipeSchema,
@@ -218,6 +219,18 @@ export const recipeRouter = createTRPCRouter({
       return ctx.db.recipe.delete({
         where: {
           id: input.id,
+        },
+      });
+    }),
+
+  deleteAll: protectedProcedure
+    .input(z.string().array())
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.recipe.deleteMany({
+        where: {
+          id: {
+            in: input,
+          },
         },
       });
     }),
