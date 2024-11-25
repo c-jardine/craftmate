@@ -1,4 +1,16 @@
-import { HStack, SimpleGrid, Stack, Tag, Text } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  HStack,
+  SimpleGrid,
+  Stack,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
@@ -102,6 +114,22 @@ export function RecipesCards({
                 fontSize="sm"
               />
             </SimpleGrid>
+
+            {recipe.notes && (
+              <Accordion allowToggle>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box as="span" flex={1} textAlign="left">
+                        Notes
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>{recipe.notes}</AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            )}
           </PageSection>
         );
       })}
