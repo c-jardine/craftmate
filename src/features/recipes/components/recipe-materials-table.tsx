@@ -1,16 +1,21 @@
-import { type ColDef } from "node_modules/ag-grid-community/dist/types/core/main";
+import {
+  type ColDef,
+  type ColGroupDef,
+} from "node_modules/ag-grid-community/dist/types/core/main";
 
 import { Table } from "~/components/table";
-import { formatCurrency } from "~/utils/currency";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
-import { type RecipesTableRows } from "./recipes-table";
+import { type RecipesRowDataType } from "./recipes-table";
 
 export function RecipeMaterialsTable({
   batchSize,
   materials,
-}: RecipesTableRows) {
+}: RecipesRowDataType) {
   type RecipeMaterialsRows = {
     name: string;
     batchQuantity: string;
@@ -26,7 +31,7 @@ export function RecipeMaterialsTable({
       quantityUnit,
     }),
     batchCost: material.cost
-      ? formatCurrency(toNumber(quantity.times(material.cost))!, {
+      ? formatCurrency(toNumber(quantity.times(material.cost)), {
           minimumFractionDigits: 4,
           maximumFractionDigits: 4,
         })
@@ -46,27 +51,43 @@ export function RecipeMaterialsTable({
       : Character.EM_DASH,
   }));
 
-  const colDefs: ColDef<RecipeMaterialsRows>[] = [
+  const colDefs: (
+    | ColDef<RecipeMaterialsRows>
+    | ColGroupDef<RecipeMaterialsRows>
+  )[] = [
     {
       headerName: "Material",
       field: "name",
       flex: 1,
+      minWidth: 150,
     },
     {
-      headerName: "Batch quantity",
-      field: "batchQuantity",
+      headerName: "Per item",
+      marryChildren: true,
+      children: [
+        {
+          headerName: "Quantity",
+          field: "unitQuantity",
+        },
+        {
+          headerName: "Cost",
+          field: "unitCost",
+        },
+      ],
     },
     {
-      headerName: "Batch cost",
-      field: "batchCost",
-    },
-    {
-      headerName: "Unit quantity",
-      field: "unitQuantity",
-    },
-    {
-      headerName: "Unit cost",
-      field: "unitCost",
+      headerName: "Per batch",
+      marryChildren: true,
+      children: [
+        {
+          headerName: "Quantity",
+          field: "batchQuantity",
+        },
+        {
+          headerName: "Cost",
+          field: "batchCost",
+        },
+      ],
     },
   ];
 
@@ -76,13 +97,7 @@ export function RecipeMaterialsTable({
       columnDefs={colDefs}
       autoSizeStrategy={{
         type: "fitCellContents",
-        colIds: [
-          "name",
-          "batchQuantity",
-          "batchCost",
-          "unitQuantity",
-          "unitCost",
-        ],
+        colIds: ["batchQuantity", "batchCost", "unitQuantity", "unitCost"],
       }}
       containerProps={{
         display: { base: "none", md: "block" },

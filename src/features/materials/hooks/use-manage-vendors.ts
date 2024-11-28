@@ -4,39 +4,39 @@ import { useCallback, useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
 import {
-  updateCategoriesFormSchema,
-  type UpdateCategoriesFormType,
+  updateVendorsFormSchema,
+  type UpdateVendorsFormType,
 } from "~/types/material";
 import { api } from "~/utils/api";
-import { useMaterialCategoriesOptions } from "./use-material-categories-options";
+import { useMaterialVendorsOptions } from "./use-material-vendors-options";
 
 /**
- * Hook containing logic for managing categories.
+ * Custom hook containing logic for managing vendors.
  */
-export function useManageCategories() {
-  // Form initialization.
-  const form = useForm<UpdateCategoriesFormType>({
+export function useManageVendors() {
+  // Form initialization
+  const form = useForm<UpdateVendorsFormType>({
     defaultValues: {
-      categories: [{ id: "", name: "" }],
+      vendors: [{ id: "", name: "" }],
     },
-    resolver: zodResolver(updateCategoriesFormSchema),
+    resolver: zodResolver(updateVendorsFormSchema),
   });
 
   const { control, reset } = form;
 
   const fieldArray = useFieldArray({
     control: control,
-    name: "categories",
+    name: "vendors",
   });
 
-  // Get existing categories data.
+  // Get existing vendors data.
   const {
     query: { data },
-  } = useMaterialCategoriesOptions();
+  } = useMaterialVendorsOptions();
 
   // Helper to initialize the form with the fetched data.
   const initializeForm = useCallback(
-    (data: UpdateCategoriesFormType) => {
+    (data: UpdateVendorsFormType) => {
       reset(data);
     },
     [reset]
@@ -44,7 +44,7 @@ export function useManageCategories() {
 
   useEffect(() => {
     if (data) {
-      initializeForm({ categories: data });
+      initializeForm({ vendors: data });
     }
   }, [data, initializeForm]);
 
@@ -55,31 +55,31 @@ export function useManageCategories() {
   const disclosure = useDisclosure({
     onOpen: () => {
       if (data) {
-        initializeForm({ categories: data });
+        initializeForm({ vendors: data });
       }
     },
   });
 
   // API utilities and mutation.
   const utils = api.useUtils();
-  const mutation = api.material.updateCategories.useMutation({
+  const mutation = api.material.updateVendors.useMutation({
     onSuccess: async () => {
       toast({
-        title: "Updated categories",
-        description: "Successfully updated categories.",
+        title: "Updated vendors",
+        description: "Successfully updated vendors.",
         status: "success",
       });
 
       // Invalidate cached data.
       await utils.material.getAll.invalidate();
-      await utils.material.getCategories.invalidate();
+      await utils.material.getVendors.invalidate();
 
       disclosure.onClose();
     },
   });
 
   // Handle form submission.
-  async function onSubmit(data: UpdateCategoriesFormType) {
+  async function onSubmit(data: UpdateVendorsFormType) {
     return await mutation.mutateAsync(data);
   }
 

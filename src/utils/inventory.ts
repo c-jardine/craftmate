@@ -1,4 +1,8 @@
-import { type MaterialQuantityUpdateAction, Prisma } from "@prisma/client";
+import {
+  Availability,
+  type MaterialQuantityUpdateAction,
+  type Prisma,
+} from "@prisma/client";
 
 interface CalculateAdjustedQuantityOptions {
   /** The original quantity. */
@@ -44,4 +48,23 @@ export function calculateAdjustedQuantity({
     default:
       return prev;
   }
+}
+
+export function calculateAvailability(
+  quantity: Prisma.Decimal,
+  minQuantity: Prisma.Decimal
+): Availability {
+  if (quantity.equals(0)) {
+    return Availability.OUT_OF_STOCK;
+  }
+
+  // const ratio = quantity.div(minQuantity);
+  // if (ratio.lessThanOrEqualTo(0.5)) {
+  //   return "Low stock";
+  // }
+  if (quantity.lessThan(minQuantity)) {
+    return Availability.LOW_STOCK;
+  }
+
+  return Availability.AVAILABLE;
 }

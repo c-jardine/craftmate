@@ -10,12 +10,12 @@ import {
   type UpdateMaterialFormType,
 } from "~/types/material";
 import { api } from "~/utils/api";
-import { mapToSelectInput } from "~/utils/selectInput";
+import { mapToSelectInput } from "~/utils/form";
 import { isTRPCClientError } from "~/utils/trpc";
-import { type MaterialsTableRows } from "../components/materials-table";
+import { type MaterialsRowDataType } from "../components/materials-table";
 
 export function useUpdateMaterial(
-  props: CustomCellRendererProps<MaterialsTableRows>["data"]
+  props: CustomCellRendererProps<MaterialsRowDataType>["data"]
 ) {
   const toast = useToast();
 
@@ -45,7 +45,7 @@ export function useUpdateMaterial(
 
   // Callback to initialize the form when node.data is ready
   const initializeForm = useCallback(
-    (data: MaterialsTableRows) => {
+    (data: MaterialsRowDataType) => {
       const {
         id,
         name,

@@ -3,11 +3,11 @@ import { HStack, Stack, Tag, Text, useColorModeValue } from "@chakra-ui/react";
 import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { RecipeViewer } from "./recipe-viewer";
-import { type RecipesTableRows } from "./recipes-table";
+import { type RecipesRowDataType } from "./recipes-table";
 
 export function NameRenderer({
   node,
-}: CustomCellRendererProps<RecipesTableRows>) {
+}: CustomCellRendererProps<RecipesRowDataType>) {
   const skuColor = useColorModeValue("zinc.500", "zinc.500");
 
   if (!node.data) {

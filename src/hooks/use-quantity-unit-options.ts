@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { api } from "~/utils/api";
-import { type SelectInput } from "~/utils/selectInput";
+import { type SelectInput } from "~/utils/form";
 
 interface FormattedGroup {
   label: string;

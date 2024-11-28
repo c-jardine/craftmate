@@ -1,6 +1,6 @@
 import {
   Button,
-  ButtonProps,
+  type ButtonProps,
   Flex,
   HStack,
   Icon,
@@ -18,12 +18,13 @@ import {
 import { FaEdit } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa6";
 import { NumericFormat } from "react-number-format";
+
 import { ControlledCreatableSelect } from "~/components/controlled-creatable-select";
 import { TextInput } from "~/components/text-input";
-import { RouterOutputs } from "~/utils/api";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import { type RouterOutputs } from "~/utils/api";
+import { formatQuantityWithUnitAbbrev } from "~/utils/formatting";
+import { calculateAdjustedQuantity } from "~/utils/inventory";
 import { toDecimal } from "~/utils/prisma";
-import { calculateAdjustedQuantity } from "~/utils/quantityAdjustment";
 import { useUpdateQuantity } from "../hooks/use-update-quantity";
 import { NewQuantityUpdateTypeForm } from "./new-quantity-update-type-form";
 

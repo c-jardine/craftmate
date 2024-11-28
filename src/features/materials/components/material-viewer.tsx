@@ -25,15 +25,19 @@ import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { Detail } from "~/components/detail";
 import { api } from "~/utils/api";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
 import { DeleteMaterialButton } from "./delete-material-button";
 import { MaterialUpdateLogs } from "./material-update-logs";
-import { type MaterialsTableRows } from "./materials-table";
+import { type MaterialsRowDataType } from "./materials-table";
 import { UpdateMaterialForm } from "./update-material-form";
 
 export function MaterialViewer(
-  props: CustomCellRendererProps<MaterialsTableRows>["data"]
+  props: CustomCellRendererProps<MaterialsRowDataType>["data"]
 ) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -115,7 +119,13 @@ export function MaterialViewer(
                 />
                 <Detail
                   title="Unit cost"
-                  details={`$${toNumber(cost)} /${quantityUnit.abbrevSingular}`}
+                  details={
+                    cost
+                      ? `${formatCurrency(toNumber(cost))} /${
+                          quantityUnit.abbrevSingular
+                        }`
+                      : Character.EM_DASH
+                  }
                 />
                 <Detail
                   title="Min. quantity"

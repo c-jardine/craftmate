@@ -4,11 +4,11 @@ import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { ExternalLink } from "~/components/external-link";
 import { MaterialViewer } from "./material-viewer";
-import { type MaterialsTableRows } from "./materials-table";
+import { type MaterialsRowDataType } from "./materials-table";
 
 export function NameRenderer({
   node,
-}: CustomCellRendererProps<MaterialsTableRows>) {
+}: CustomCellRendererProps<MaterialsRowDataType>) {
   const skuColor = useColorModeValue("zinc.500", "zinc.500");
 
   if (!node.data) {

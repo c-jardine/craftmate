@@ -21,8 +21,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Controller } from "react-hook-form";
-import { FaDollarSign, FaPlus, FaX } from "react-icons/fa6";
+import { FaDollarSign, FaPencil, FaPlus, FaX } from "react-icons/fa6";
 import { NumericFormat } from "react-number-format";
+
+import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { ControlledCreatableSelect } from "~/components/controlled-creatable-select";
 import { ControlledSelect } from "~/components/controlled-select";
@@ -30,11 +32,14 @@ import { TextInput } from "~/components/text-input";
 import { useMaterialOptions } from "~/hooks/use-material-options";
 import { useQuantityUnitOptions } from "~/hooks/use-quantity-unit-options";
 import { type SelectInput } from "~/utils/form";
-import { useCreateRecipe } from "../hooks/use-create-recipe";
-import { type CreateRecipeFormType } from "../types";
+import { useUpdateRecipe } from "../hooks/use-update-recipe";
+import { type UpdateRecipeFormType } from "../types";
+import { type RecipesRowDataType } from "./recipes-table";
 import { useRecipeCategoriesOptions } from "./use-recipe-categories-options";
 
-export function CreateRecipeForm() {
+export function UpdateRecipeForm(
+  props: CustomCellRendererProps<RecipesRowDataType>["data"]
+) {
   const {
     form: {
       control,
@@ -46,7 +51,7 @@ export function CreateRecipeForm() {
     fieldArray: { fields, append, remove },
     onSubmit,
     disclosure: { isOpen, onOpen, onClose },
-  } = useCreateRecipe();
+  } = useUpdateRecipe(props);
 
   const { quantityUnitOptions } = useQuantityUnitOptions();
   const { materialOptions } = useMaterialOptions();
@@ -54,14 +59,8 @@ export function CreateRecipeForm() {
 
   return (
     <>
-      <Button
-        display={{ base: "none", md: "flex" }}
-        variant="primary"
-        leftIcon={<Icon as={FaPlus} />}
-        fontSize="sm"
-        onClick={onOpen}
-      >
-        New recipe
+      <Button leftIcon={<Icon as={FaPencil} />} onClick={onOpen}>
+        Update recipe
       </Button>
       <Drawer size="md" {...{ isOpen, onClose }}>
         <DrawerOverlay />
@@ -70,7 +69,7 @@ export function CreateRecipeForm() {
           <DrawerBody>
             <Stack
               as="form"
-              id="create-recipe-form"
+              id="edit-recipe-form"
               onSubmit={handleSubmit(onSubmit)}
               spacing={4}
             >
@@ -186,7 +185,14 @@ export function CreateRecipeForm() {
                         <ControlledSelect
                           control={control}
                           name={`materials.${index}.material`}
-                          options={materialOptions}
+                          options={materialOptions?.filter(
+                            (option) =>
+                              !watch("materials")?.some(
+                                (material) =>
+                                  material.material?.value.id ===
+                                  option.value.id
+                              )
+                          )}
                           noOptionsMessage={() => (
                             <Text>No materials found.</Text>
                           )}
@@ -240,28 +246,13 @@ export function CreateRecipeForm() {
                       quantity: undefined,
                     })
                   }
-                  isDisabled={(() => {
-                    const length = watch("materials").length;
-                    const lastMaterial = watch("materials")[length - 1];
-
-                    if (lastMaterial) {
-                      const { material, quantity } = lastMaterial;
-                      if (material?.label && quantity) {
-                        return false;
-                      }
-
-                      return true;
-                    }
-
-                    return true;
-                  })()}
                 >
                   Add material
                 </Button>
               </Stack>
 
               <ControlledCreatableSelect<
-                CreateRecipeFormType,
+                UpdateRecipeFormType,
                 SelectInput,
                 true
               >
@@ -288,11 +279,11 @@ export function CreateRecipeForm() {
             </Button>
             <Button
               type="submit"
-              form="create-recipe-form"
+              form="edit-recipe-form"
               variant="primary"
               isDisabled={!!isSubmitting}
             >
-              Create
+              Save
             </Button>
           </DrawerFooter>
         </DrawerContent>

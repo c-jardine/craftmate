@@ -7,7 +7,7 @@ import {
   updateMaterialQuantityFormSchema,
   type UpdateMaterialQuantityFormType,
 } from "~/types/material";
-import { api, RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 
 export function useUpdateQuantity(
   props: RouterOutputs["material"]["getAll"][0]
@@ -34,10 +34,13 @@ export function useUpdateQuantity(
     },
   });
 
+  const { minQuantity } = props;
+
   const form = useForm<UpdateMaterialQuantityFormType>({
     defaultValues: {
       materialId: props.id ?? undefined,
       originalQuantity: props.quantity?.toString() ?? "0",
+      minQuantity: minQuantity.toString(),
     },
     resolver: zodResolver(updateMaterialQuantityFormSchema),
   });
@@ -55,9 +58,10 @@ export function useUpdateQuantity(
       reset({
         materialId: data.id,
         originalQuantity: data.quantity?.toString() ?? "0",
+        minQuantity: minQuantity.toString(),
       });
     },
-    [reset]
+    [minQuantity, reset]
   );
 
   useEffect(() => {

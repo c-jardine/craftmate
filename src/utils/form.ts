@@ -1,5 +1,20 @@
 import { z } from "zod";
-import { removeCommas } from "./text";
+import { removeCommas } from "./formatting";
+
+export type SelectInput = {
+  label: string;
+  value: string;
+};
+
+export function mapToSelectInput({
+  id,
+  name,
+}: {
+  id: string;
+  name: string;
+}): SelectInput {
+  return { label: name, value: id };
+}
 
 const OPTIONAL_POSITIVE_NUMBER = z.union([z.number().min(0), z.nan()]);
 

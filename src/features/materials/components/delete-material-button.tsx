@@ -63,7 +63,7 @@ export function DeleteMaterialButton({
             <Button colorScheme="red" onClick={handleDelete}>
               Delete material
             </Button>
-            <Button>Cancel</Button>
+            <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

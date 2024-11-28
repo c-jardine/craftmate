@@ -1,8 +1,4 @@
-import { Flex, useToast } from "@chakra-ui/react";
 import { type Prisma, type Vendor } from "@prisma/client";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import PuffLoader from "react-spinners/PuffLoader";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
@@ -12,63 +8,37 @@ import {
 } from "node_modules/ag-grid-community/dist/types/core/main";
 
 import { Table } from "~/components/table";
-import { api, type RouterOutputs } from "~/utils/api";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
-import { Character } from "~/utils/text";
+import { type RouterOutputs } from "~/utils/api";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
+import { toNumber } from "~/utils/prisma";
+import { useDeleteMaterials } from "../hooks/use-delete-materials";
+import { AvailabilityRenderer } from "./availability-renderer";
 import { NameRenderer } from "./name-renderer";
 import { QuantityRenderer } from "./quantity-renderer";
-import { StatusRenderer } from "./status-renderer";
 
-// Table column type definition
-export type MaterialsTableRows = RouterOutputs["material"]["getAll"][0] & {
-  status: string;
-};
+type MaterialsData = RouterOutputs["material"]["getAll"];
 
-export function MaterialsTable() {
-  const { data: session } = useSession();
+// Table row data type.
+export type MaterialsRowDataType = MaterialsData[0];
 
-  // Fetch materials query
-  const { data: materials, isLoading } = api.material.getAll.useQuery(
-    undefined,
-    {
-      enabled: session?.user !== undefined,
-    }
-  );
+export function MaterialsTable({
+  materials,
+}: {
+  materials: MaterialsData | undefined;
+}) {
+  // Get onDelete handler.
+  const { onDelete } = useDeleteMaterials();
 
-  const toast = useToast();
-
-  const utils = api.useUtils();
-  const deleteMutation = api.material.deleteAll.useMutation({
-    onSuccess: async ({ count }) => {
-      toast({
-        title: "Deleted materials",
-        description: `Deleted ${count} materials`,
-        status: "success",
-      });
-      await utils.material.getAll.invalidate();
-    },
-  });
-
-  function onDelete(data: string[]) {
-    deleteMutation.mutate(data);
+  if (!materials) {
+    return null;
   }
 
-  // Materials data as state
-  const [rowData, setRowData] = useState<MaterialsTableRows[]>([]);
-
-  // Update table data when the data is available
-  useEffect(() => {
-    if (materials) {
-      setRowData(
-        materials.map((material) => ({
-          ...material,
-          status: "Format status",
-        }))
-      );
-    }
-  }, [materials]);
-
-  const colDefs: ColDef<MaterialsTableRows>[] = [
+  // Define table columns.
+  const colDefs: ColDef<MaterialsRowDataType>[] = [
     {
       headerName: "Name",
       field: "name",
@@ -80,9 +50,9 @@ export function MaterialsTable() {
       cellRenderer: NameRenderer,
     },
     {
-      headerName: "Status",
-      field: "status",
-      cellRenderer: StatusRenderer,
+      headerName: "Availability",
+      field: "availability",
+      cellRenderer: AvailabilityRenderer,
       cellStyle: {
         display: "flex",
         alignItems: "center",
@@ -100,13 +70,12 @@ export function MaterialsTable() {
     {
       headerName: "Min. quantity",
       field: "minQuantity",
-      filter: true,
       cellStyle: {
         display: "flex",
         alignItems: "center",
       },
       valueFormatter: (
-        params: ValueFormatterParams<MaterialsTableRows, Prisma.Decimal>
+        params: ValueFormatterParams<MaterialsRowDataType, Prisma.Decimal>
       ) => {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
@@ -125,12 +94,12 @@ export function MaterialsTable() {
         alignItems: "center",
       },
       valueFormatter: (
-        params: ValueFormatterParams<MaterialsTableRows, Prisma.Decimal>
+        params: ValueFormatterParams<MaterialsRowDataType, Prisma.Decimal>
       ) => {
         if (!params.value || !params.data) {
           return Character.EM_DASH;
         }
-        return `$${params.value.toString()} /${
+        return `${formatCurrency(toNumber(params.value))} /${
           params.data.quantityUnit.abbrevSingular
         }`;
       },
@@ -144,7 +113,7 @@ export function MaterialsTable() {
         alignItems: "center",
       },
       valueFormatter: (
-        params: ValueFormatterParams<MaterialsTableRows, Vendor>
+        params: ValueFormatterParams<MaterialsRowDataType, Vendor>
       ) => {
         if (!params.value) {
           return Character.EM_DASH;
@@ -155,22 +124,9 @@ export function MaterialsTable() {
     },
   ];
 
-  // Show spinner if query is loading
-  if (isLoading) {
-    return (
-      <Flex justifyContent="center" alignItems="center" flexGrow={1}>
-        <PuffLoader color="var(--chakra-colors-blue-500)" />
-      </Flex>
-    );
-  }
-
-  if (!materials) {
-    return null;
-  }
-
   return (
-    <Table<MaterialsTableRows>
-      rowData={rowData}
+    <Table<MaterialsRowDataType>
+      rowData={materials}
       columnDefs={colDefs}
       autoSizeStrategy={{
         type: "fitCellContents",

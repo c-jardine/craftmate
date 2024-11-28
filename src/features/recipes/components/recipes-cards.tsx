@@ -1,40 +1,42 @@
-import { Flex, HStack, SimpleGrid, Stack, Tag, Text } from "@chakra-ui/react";
-import PuffLoader from "react-spinners/PuffLoader";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  HStack,
+  SimpleGrid,
+  Stack,
+  Tag,
+  Text,
+} from "@chakra-ui/react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 
 import { Detail } from "~/components/detail";
 import { PageSection } from "~/components/page-section";
-import { api } from "~/utils/api";
-import { formatCurrency } from "~/utils/currency";
+import { type RouterOutputs } from "~/utils/api";
+import { Character, formatCurrency } from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
 import { RecipeViewer } from "./recipe-viewer";
 
-export function RecipesCards() {
-  // Fetch materials query
-  const { data: recipes, isLoading } = api.recipe.getAll.useQuery();
-
-  // Show spinner if query is loading
-  if (isLoading) {
-    return (
-      <Flex justifyContent="center" alignItems="center" flexGrow={1}>
-        <PuffLoader color="var(--chakra-colors-blue-500)" />
-      </Flex>
-    );
-  }
-
+export function RecipesCards({
+  recipes,
+}: {
+  recipes: RouterOutputs["recipe"]["getAll"] | undefined;
+}) {
   if (!recipes) {
     return null;
   }
 
   return (
-    <Stack>
+    <Stack display={{ base: "flex", md: "none" }}>
       {recipes.map((recipe) => {
         // Calculate the margin.
         const margin = recipe.retailPrice
-          ? recipe.retailPrice.minus(recipe.costPerUnit).div(recipe.retailPrice)
+          ? recipe.retailPrice.minus(recipe.cogsUnit).div(recipe.retailPrice)
           : undefined;
 
         // Format the margin for display.
@@ -73,14 +75,8 @@ export function RecipesCards() {
               />
 
               <Detail
-                title="UPC"
-                details={recipe.upc ?? Character.EM_DASH}
-                fontSize="sm"
-              />
-
-              <Detail
                 title="Unit cost"
-                details={`${formatCurrency(toNumber(recipe.costPerUnit)!)} /${
+                details={`${formatCurrency(toNumber(recipe.cogsUnit))} /${
                   recipe.batchSizeUnit.abbrevSingular
                 }`}
                 alignItems="flex-end"
@@ -89,17 +85,25 @@ export function RecipesCards() {
 
               <Detail
                 title="MSRP"
-                details={`${formatCurrency(toNumber(recipe.retailPrice)!)} /${
-                  recipe.batchSizeUnit.abbrevSingular
-                }`}
+                details={
+                  recipe.retailPrice
+                    ? `${formatCurrency(toNumber(recipe.retailPrice))} /${
+                        recipe.batchSizeUnit.abbrevSingular
+                      }`
+                    : Character.EM_DASH
+                }
                 fontSize="sm"
               />
 
               <Detail
                 title="Wholesale"
-                details={`${formatCurrency(
-                  toNumber(recipe.wholesalePrice)!
-                )} /${recipe.batchSizeUnit.abbrevSingular}`}
+                details={
+                  recipe.wholesalePrice
+                    ? `${formatCurrency(toNumber(recipe.wholesalePrice))} /${
+                        recipe.batchSizeUnit.abbrevSingular
+                      }`
+                    : Character.EM_DASH
+                }
                 fontSize="sm"
               />
 
@@ -110,6 +114,22 @@ export function RecipesCards() {
                 fontSize="sm"
               />
             </SimpleGrid>
+
+            {recipe.notes && (
+              <Accordion allowToggle>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box as="span" flex={1} textAlign="left">
+                        Notes
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>{recipe.notes}</AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            )}
           </PageSection>
         );
       })}

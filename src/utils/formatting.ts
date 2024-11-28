@@ -1,5 +1,23 @@
-import { type QuantityUnit, Prisma } from "@prisma/client";
-import { Character } from "./text";
+import { Availability, type Prisma, type QuantityUnit } from "@prisma/client";
+
+export const Character = {
+  EM_DASH: "—",
+};
+
+export function removeCommas(value: string) {
+  return value.replace(/,/g, "");
+}
+
+export function formatCurrency(
+  amount: number,
+  options?: Intl.NumberFormatOptions
+) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    ...options,
+  }).format(amount);
+}
 
 interface FormatQuantityWithUnitOptions {
   /** The quantity, used to determine if the unit should be singular or plural. */
@@ -73,4 +91,17 @@ export function formatQuantityWithUnitAbbrev(
   });
 
   return `${options.quantity.toString()} ${quantityUnitText}`;
+}
+
+export function formatAvailability(availability: Availability) {
+  switch (availability) {
+    case Availability.AVAILABLE:
+      return "Available";
+    case Availability.LOW_STOCK:
+      return "Low stock";
+    case Availability.OUT_OF_STOCK:
+      return "Out of stock";
+    default:
+      return Character.EM_DASH;
+  }
 }

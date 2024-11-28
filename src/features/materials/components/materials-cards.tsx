@@ -1,39 +1,43 @@
-import { Flex, HStack, SimpleGrid, Stack, Tag } from "@chakra-ui/react";
-import PuffLoader from "react-spinners/PuffLoader";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  HStack,
+  SimpleGrid,
+  Stack,
+  Tag,
+} from "@chakra-ui/react";
 
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the Data Grid
 
 import { Detail } from "~/components/detail";
 import { PageSection } from "~/components/page-section";
-import { api } from "~/utils/api";
-import { formatCurrency } from "~/utils/currency";
-import { formatQuantityWithUnitAbbrev } from "~/utils/formatQuantity";
+import { type RouterOutputs } from "~/utils/api";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
+import { AvailabilityIndicator } from "./availability-indicator";
 import { MaterialViewer } from "./material-viewer";
 import { QuantityEditor } from "./quantity-editor";
-import { StatusIndicator } from "./status-indicator";
 
-export function MaterialsCards() {
-  // Fetch materials query
-  const { data: materials, isLoading } = api.material.getAll.useQuery();
-
-  // Show spinner if query is loading
-  if (isLoading) {
-    return (
-      <Flex justifyContent="center" alignItems="center" flexGrow={1}>
-        <PuffLoader color="var(--chakra-colors-blue-500)" />
-      </Flex>
-    );
-  }
-
+export function MaterialsCards({
+  materials,
+}: {
+  materials: RouterOutputs["material"]["getAll"] | undefined;
+}) {
   if (!materials) {
     return null;
   }
 
   return (
-    <Stack spacing={4}>
+    <Stack display={{ base: "flex", md: "none" }} spacing={4}>
       {materials.map((material) => {
         return (
           <PageSection
@@ -42,9 +46,9 @@ export function MaterialsCards() {
             display={{ base: "flex", md: "none" }}
           >
             <HStack justifyContent="space-between" alignItems="center">
-              <MaterialViewer {...material} status="In Stock" />
+              <MaterialViewer {...material} />
               {material.quantity && material.minQuantity && (
-                <StatusIndicator {...material} />
+                <AvailabilityIndicator {...material} />
               )}
             </HStack>
 
@@ -80,9 +84,13 @@ export function MaterialsCards() {
 
               <Detail
                 title="Cost"
-                details={`${formatCurrency(toNumber(material.cost)!)} /${
-                  material.quantityUnit.abbrevSingular
-                }`}
+                details={
+                  material.cost
+                    ? `${formatCurrency(toNumber(material.cost))} /${
+                        material.quantityUnit.abbrevSingular
+                      }`
+                    : Character.EM_DASH
+                }
                 fontSize="sm"
               />
 
@@ -96,6 +104,22 @@ export function MaterialsCards() {
                 alignItems="flex-end"
               />
             </SimpleGrid>
+
+            {material.notes && (
+              <Accordion allowToggle>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box as="span" flex={1} textAlign="left">
+                        Notes
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>{material.notes}</AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            )}
           </PageSection>
         );
       })}

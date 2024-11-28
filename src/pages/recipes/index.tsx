@@ -7,18 +7,29 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FaHistory } from "react-icons/fa";
 import { FaEllipsis } from "react-icons/fa6";
 
 import { PageHeader } from "~/components/page-header";
+import { PageLoader } from "~/components/page-loader";
+import { PageSection } from "~/components/page-section";
 import { CreateRecipeForm } from "~/features/recipes/components/create-recipe-form";
 import { RecipesCards } from "~/features/recipes/components/recipes-cards";
 import { RecipesTable } from "~/features/recipes/components/recipes-table";
 import { withAuth } from "~/server/auth";
+import { api } from "~/utils/api";
 
 export default function Recipes() {
+  // Fetch recipes query.
+  const { data: recipes, isLoading } = api.recipe.getAll.useQuery();
+
+  if (isLoading) {
+    return <PageLoader />;
+  }
+
   return (
     <Stack spacing={4} h="full">
       <PageHeader>
@@ -44,10 +55,19 @@ export default function Recipes() {
           <CreateRecipeForm />
         </PageHeader.Content>
       </PageHeader>
-      <>
-        <RecipesTable />
-        <RecipesCards />
-      </>
+
+      {recipes?.length && recipes.length > 0 ? (
+        <>
+          <RecipesTable recipes={recipes} />
+          <RecipesCards recipes={recipes} />
+        </>
+      ) : (
+        <PageSection>
+          <Text fontStyle="italic" textAlign="center">
+            No recipes to show.
+          </Text>
+        </PageSection>
+      )}
     </Stack>
   );
 }

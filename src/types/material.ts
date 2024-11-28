@@ -1,7 +1,7 @@
 import { MaterialQuantityUpdateAction } from "@prisma/client";
 import { z } from "zod";
 
-import { CustomZod } from "~/utils/zod";
+import { CustomZod } from "~/utils/form";
 
 export const createMaterialFormSchema = z.object({
   name: z.string().min(1, "Required"),
@@ -13,7 +13,7 @@ export const createMaterialFormSchema = z.object({
     label: z.string(),
     value: z.string(),
   }),
-  minQuantity: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
+  minQuantity: CustomZod.PRISMA_POSITIVE_DECIMAL,
   notes: z.string().optional(),
   vendor: z
     .object({
@@ -37,9 +37,9 @@ export const updateMaterialFormSchema = z.object({
   url: CustomZod.OPTIONAL_URL,
   sku: z.string().optional(),
   cost: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
-  quantity: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
+  quantity: CustomZod.PRISMA_POSITIVE_DECIMAL,
   quantityUnit: z.string(),
-  minQuantity: CustomZod.PRISMA_POSITIVE_DECIMAL.optional(),
+  minQuantity: CustomZod.PRISMA_POSITIVE_DECIMAL,
   notes: z.string().optional(),
   vendor: z
     .object({
@@ -75,6 +75,7 @@ export const updateMaterialQuantityFormSchema = z.object({
   }),
   originalQuantity: z.string(),
   adjustedQuantity: z.string(),
+  minQuantity: CustomZod.PRISMA_POSITIVE_DECIMAL,
   notes: z.string().optional(),
 });
 

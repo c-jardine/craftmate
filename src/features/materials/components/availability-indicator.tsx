@@ -2,15 +2,18 @@ import {
   Tag,
   TagLabel,
   TagLeftIcon,
-  TagProps,
+  type TagProps,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { Availability } from "@prisma/client";
 import { FaCircle } from "react-icons/fa6";
-import { QuantityStatus } from "~/types/status";
-import { RouterOutputs } from "~/utils/api";
-import { getStockStatus } from "~/utils/stockStatus";
 
-export function StatusIndicator(props: RouterOutputs["material"]["getAll"][0]) {
+import { type RouterOutputs } from "~/utils/api";
+import { formatAvailability } from "~/utils/formatting";
+
+export function AvailabilityIndicator({
+  availability,
+}: RouterOutputs["material"]["getAll"][0]) {
   const greenStyles = {
     border: "1px",
     borderColor: useColorModeValue("green.300", "green.900"),
@@ -32,27 +35,25 @@ export function StatusIndicator(props: RouterOutputs["material"]["getAll"][0]) {
     color: useColorModeValue("red.800", "red.500"),
   };
 
-  function getStyles(status: QuantityStatus): TagProps {
+  function getStyles(status: Availability | null): TagProps {
     switch (status) {
-      case "Available":
+      case Availability.AVAILABLE:
         return greenStyles;
-      case "Low stock":
+      case Availability.LOW_STOCK:
         return yellowStyles;
-      case "Out of stock":
+      case Availability.OUT_OF_STOCK:
         return redStyles;
       default:
         return {};
     }
   }
 
-  const { quantity, minQuantity } = props;
-
-  const stockStatus = quantity && getStockStatus(quantity, minQuantity);
+  const availabilityFormatted = formatAvailability(availability);
 
   return (
-    <Tag fontSize="xs" fontWeight="light" {...getStyles(stockStatus)}>
+    <Tag fontSize="xs" fontWeight="light" {...getStyles(availability)}>
       <TagLeftIcon as={FaCircle} boxSize={1.5} />
-      <TagLabel>{stockStatus}</TagLabel>
+      <TagLabel>{availabilityFormatted}</TagLabel>
     </Tag>
   );
 }

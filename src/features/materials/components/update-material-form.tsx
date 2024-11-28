@@ -30,12 +30,12 @@ import { type CustomCellRendererProps } from "ag-grid-react";
 import { ControlledCreatableSelect } from "~/components/controlled-creatable-select";
 import { TextInput } from "~/components/text-input";
 import { type UpdateMaterialFormType } from "~/types/material";
-import { type SelectInput } from "~/utils/selectInput";
+import { type SelectInput } from "~/utils/form";
 import { useUpdateMaterial } from "../hooks/use-update-material";
-import { type MaterialsTableRows } from "./materials-table";
+import { type MaterialsRowDataType } from "./materials-table";
 
 export function UpdateMaterialForm(
-  props: CustomCellRendererProps<MaterialsTableRows>["data"]
+  props: CustomCellRendererProps<MaterialsRowDataType>["data"]
 ) {
   const {
     form: {

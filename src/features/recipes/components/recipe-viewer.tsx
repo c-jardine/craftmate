@@ -24,16 +24,22 @@ import { FaEllipsis } from "react-icons/fa6";
 import { type CustomCellRendererProps } from "ag-grid-react";
 
 import { Detail } from "~/components/detail";
-import { formatCurrency } from "~/utils/currency";
+import { PageSection } from "~/components/page-section";
+import {
+  Character,
+  formatCurrency,
+  formatQuantityWithUnitAbbrev,
+} from "~/utils/formatting";
+import { formatMargin } from "~/utils/math";
 import { toNumber } from "~/utils/prisma";
-import { Character } from "~/utils/text";
 import { DeleteRecipeButton } from "./delete-recipe-button";
 import { RecipeMaterialsCards } from "./recipe-materials-cards";
 import { RecipeMaterialsTable } from "./recipe-materials-table";
-import { type RecipesTableRows } from "./recipes-table";
+import { type RecipesRowDataType } from "./recipes-table";
+import { UpdateRecipeForm } from "./update-recipe-form";
 
 export function RecipeViewer(
-  props: CustomCellRendererProps<RecipesTableRows>["data"]
+  props: CustomCellRendererProps<RecipesRowDataType>["data"]
 ) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -44,29 +50,20 @@ export function RecipeViewer(
   const {
     name,
     sku,
-    upc,
     retailPrice,
+    retailMargin,
     wholesalePrice,
-    costPerUnit,
+    wholesaleMargin,
+    cogsUnit,
+    cogsBatch,
     batchSize,
     batchSizeUnit,
     materials,
     categories,
   } = props;
 
-  // Calculate the margin.
-  const margin = retailPrice
-    ? retailPrice.minus(costPerUnit).div(retailPrice)
-    : undefined;
-
-  // Format the margin for display.
-  const marginFormatted = margin
-    ? Intl.NumberFormat("en-US", {
-        style: "percent",
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(margin.toNumber())
-    : Character.EM_DASH;
+  const retailMarginFormatted = formatMargin(retailMargin);
+  const wholesaleMarginFormatted = formatMargin(wholesaleMargin);
 
   return (
     <>
@@ -103,7 +100,7 @@ export function RecipeViewer(
           <DrawerBody>
             <Stack spacing={4} h="full">
               <HStack>
-                {/* <UpdateMaterialForm {...props} /> */}
+                <UpdateRecipeForm {...props} />
                 <Menu>
                   <MenuButton
                     as={IconButton}
@@ -116,36 +113,84 @@ export function RecipeViewer(
                 </Menu>
               </HStack>
 
-              <SimpleGrid columns={4} gap={4}>
+              {sku && (
+                <SimpleGrid columns={3} gap={4}>
+                  <Detail title="SKU" details={sku ?? Character.EM_DASH} />
+                </SimpleGrid>
+              )}
+
+              <SimpleGrid columns={3} gap={4}>
                 <Detail
-                  title="MSRP"
-                  details={
-                    retailPrice
-                      ? formatCurrency(toNumber(retailPrice)!)
-                      : Character.EM_DASH
-                  }
+                  title="Batch size"
+                  details={formatQuantityWithUnitAbbrev({
+                    quantity: batchSize,
+                    quantityUnit: batchSizeUnit,
+                  })}
                 />
-                <Detail
-                  title="Wholesale"
-                  details={
-                    wholesalePrice
-                      ? formatCurrency(toNumber(wholesalePrice)!)
-                      : Character.EM_DASH
-                  }
-                />
+
                 <Detail
                   title="Cost per unit"
-                  details={`${formatCurrency(toNumber(costPerUnit)!)} /${
+                  details={`${formatCurrency(toNumber(cogsUnit))} /${
                     batchSizeUnit.abbrevSingular
                   }`}
                 />
-                <Detail title="Margin" details={marginFormatted} />
+
                 <Detail
-                  title="Batch size"
-                  details={toNumber(batchSize) ?? Character.EM_DASH}
+                  title="Cost per batch"
+                  details={`${formatCurrency(toNumber(cogsBatch))} /${
+                    batchSizeUnit.abbrevSingular
+                  }`}
                 />
-                <Detail title="SKU" details={sku ?? Character.EM_DASH} />
-                <Detail title="UPC" details={upc ?? Character.EM_DASH} />
+              </SimpleGrid>
+
+              <Heading as="h2" fontSize="lg">
+                Pricing
+              </Heading>
+
+              <SimpleGrid columns={2} gap={4}>
+                <PageSection position="relative">
+                  <Tag
+                    position="absolute"
+                    top={-3}
+                    left="50%"
+                    transform="translateX(-50%)"
+                  >
+                    Retail
+                  </Tag>
+                  <SimpleGrid columns={2} gap={4}>
+                    <Detail
+                      title="Price"
+                      details={
+                        retailPrice
+                          ? formatCurrency(toNumber(retailPrice))
+                          : Character.EM_DASH
+                      }
+                    />
+                    <Detail title="Margin" details={retailMarginFormatted} />
+                  </SimpleGrid>
+                </PageSection>
+
+                <PageSection position="relative">
+                  <Tag
+                    position="absolute"
+                    top={-3}
+                    left="50%"
+                    transform="translateX(-50%)"
+                  >
+                    Wholesale
+                  </Tag>
+                  <SimpleGrid columns={2} gap={4}>
+                    <Detail
+                      title="Price"
+                      details={
+                        wholesalePrice
+                          ? formatCurrency(toNumber(wholesalePrice))
+                          : Character.EM_DASH
+                      }
+                    />
+                    <Detail title="Margin" details={wholesaleMarginFormatted} />
+                  </SimpleGrid>
+                </PageSection>
               </SimpleGrid>
 
               {/* Materials list */}
